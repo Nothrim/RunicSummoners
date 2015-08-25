@@ -1,0 +1,131 @@
+
+Runes.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+RuneArrow
+  rotate: false
+  xy: 1, 211
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+RuneBeast
+  rotate: false
+  xy: 1, 169
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+RuneBlank
+  rotate: false
+  xy: 43, 211
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+RuneEarth
+  rotate: false
+  xy: 1, 127
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+RuneFire
+  rotate: false
+  xy: 43, 169
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+RuneLife
+  rotate: false
+  xy: 85, 211
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+RuneLight
+  rotate: false
+  xy: 1, 85
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+RuneLightning
+  rotate: false
+  xy: 43, 127
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+RuneMiasma
+  rotate: false
+  xy: 85, 169
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+RuneMoon
+  rotate: false
+  xy: 1, 43
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+RunePlant
+  rotate: false
+  xy: 43, 85
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+RuneProtection
+  rotate: false
+  xy: 85, 127
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+RuneShadow
+  rotate: false
+  xy: 1, 1
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+RuneSky
+  rotate: false
+  xy: 43, 43
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+RuneSpell
+  rotate: false
+  xy: 85, 85
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+RuneSun
+  rotate: false
+  xy: 43, 1
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+RuneSword
+  rotate: false
+  xy: 85, 43
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+RuneUnderground
+  rotate: false
+  xy: 85, 1
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
