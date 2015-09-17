@@ -2,6 +2,9 @@ package com.runic;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.runic.Units.BaseUnit;
@@ -13,12 +16,15 @@ import org.w3c.dom.Text;
 public class Castle {
     boolean immune=false;
     Player owner;
-    private Texture texture;
     private int health;
-    private Rectangle hitbox;
     private float x;
     private float y;
     private float spawnpoint;
+    private float origin=0;
+    private float health80;
+    private float health60;
+    private float health30;
+    private float health15;
 
 
     public float getX() {
@@ -29,34 +35,52 @@ public class Castle {
         return y;
     }
     public float getSpawnpoint(){return spawnpoint;}
-    public Rectangle getHitbox(){return hitbox;}
-    public Castle(Player owner,int health,Texture texture,float x,float y){
+    public Castle(Player owner,int health,float x,float y){
         this.owner=owner;
         this.health=health;
-        this.texture=texture;
         this.x=x;
         this.y=y;
-        hitbox=new Rectangle(x,y,texture.getWidth()/2,texture.getHeight());
         if(x<700)
         {
-            spawnpoint=x+texture.getWidth();
+            spawnpoint=x+Assets.getInstance().Castle.findRegion("Castle0").getRegionWidth();
         }
         else
             spawnpoint=x;
+        health80=health*0.8f;
+        health60=health*0.6f;
+        health30=health*0.3f;
+        health15=health*0.15f;
     }
     public void draw(SpriteBatch sb){
-        sb.draw(texture,x,y);
+        TextureRegion texture;
+        if (health>health80)
+            texture=Assets.getInstance().Castle.findRegion("Castle0");
+        else if(health>health60)
+            texture=Assets.getInstance().Castle.findRegion("Castle1");
+        else if(health>health30)
+            texture=Assets.getInstance().Castle.findRegion("Castle2");
+        else if(health>health15)
+            texture=Assets.getInstance().Castle.findRegion("Castle3");
+        else
+            texture=Assets.getInstance().Castle.findRegion("Castle4");
+        //texture.flip(owner.whoAmI()==1,false);
+        if(owner.whoAmI()==1) {
+            sb.draw(texture,x+texture.getRegionWidth(),y,-texture.getRegionWidth(),texture.getRegionHeight());
+        }
+        else
+            sb.draw(texture,x,y);
+
     }
     public float distance(BaseUnit u)
     {
-      return Math.abs(u.getX()-spawnpoint);
+      return Math.abs(u.getX()-u.getHitbox().width/2-spawnpoint);
     }
     public boolean damage(int dmg)
     {
         if(immune)return false;
         else {
             int random = MathUtils.random(dmg / 2, dmg);
-            CombatText.create(Integer.toString(random), x, y);
+            CombatText.create(Integer.toString(random), spawnpoint, y);
             health -= random;
             if (health<0) {
                 owner.lose();

@@ -1,6 +1,7 @@
 package com.runic;
 
 import android.graphics.Color;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -28,10 +29,20 @@ public class Player extends InputAdapter{
     }
     public int whoAmI(){return id;}
     Castle castle;
+    private boolean casting=false;
+    private float castingTimer=0;
+    public boolean isCasting(){return  casting;}
+    public float getCastingTimer(){return  castingTimer;}
+    public void cast(){
+        casting=true;
+        if(castingTimer<1)
+            castingTimer+=1;
+    }
     private BaseUnit[] Army=new BaseUnit[100];
     public BaseUnit[] getArmy(){return Army;}
     public float getX(){return Origin.x;}
     public float getY(){return Origin.y;}
+    public CastingTable getCastingTable(){return  castingTable;}
     public boolean spawnUnit(BaseUnit u){
         for(int i=0;i<Army.length;i++)
         {
@@ -110,9 +121,9 @@ public class Player extends InputAdapter{
     {
         this.id=id;
         if(Origin.x<700)
-        castle=new Castle(this,1000,Assets.getInstance().Castle,Origin.x,200);
+        castle=new Castle(this,1000,Origin.x,200);
         else
-            castle=new Castle(this,1000,Assets.getInstance().Castle,Origin.x+Assets.getInstance().Castle.getWidth(),200);
+            castle=new Castle(this,1000,Origin.x+Assets.getInstance().Castle.findRegion("Castle0").getRegionWidth(),200);
         castingTable=new CastingTable(new Vector2(Origin.x,840),this);
         int random;
         String name;
@@ -215,6 +226,7 @@ public class Player extends InputAdapter{
     }
     public void draw(SpriteBatch sb)
     {
+        update(Gdx.graphics.getDeltaTime());
         for(int i=0;i<RunesTable.length;i++)
         RunesTable[i].draw(sb);
         for(int i=0;i<Army.length;i++)
@@ -248,10 +260,47 @@ public class Player extends InputAdapter{
             }
         }
     }
+    public void refillChosen(int pickedRune)
+    {
+        int id;
+        for(int i=0;i<RunesTable.length;i++)
+        {
+            if(RunesTable[i].id==pickedRune)
+            {
+                id=MathUtils.random(0,16);
+                RunesTable[i]=new Rune(Rune.loadSprite(id),id,Rune.loadName(id),RunesTable[i].getX(),RunesTable[i].getY(),false);
+            }
+        }
+    }
+    public void fillWith(int id,int chanceOfFailure)
+    {
+
+        for(int i=0;i<RunesTable.length;i++){
+            if(MathUtils.random(0,chanceOfFailure)!=0)
+               RunesTable[i] = new Rune(Rune.loadSprite(-1),id,Rune.loadName(-1),RunesTable[i].getX(),RunesTable[i].getY(),true);
+            else
+                RunesTable[i] = new Rune(Rune.loadSprite(id),id,Rune.loadName(id),RunesTable[i].getX(),RunesTable[i].getY(),false);
+            }
+    }
     public void lose()
     {
         System.out.println(whoAmI()+" lost!");
     }
     public Castle getCastle(){return castle;}
-
+    public void dispose()
+    {
+        castingTable.dispose();
+    }
+    public String getCurrentCombination(){return CurrentCombination;}
+    private void update(float deltaTime)
+    {
+        if(casting) {
+            if (castingTimer > 0)
+                castingTimer -= deltaTime;
+            else {
+                castingTimer = 0;
+                casting = false;
+            }
+        }
+    }
 }

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_runicsummoners" default="compile.module.runicsummoners">
+  <dirname property="module.runicsummoners.basedir" file="${ant.file.module_runicsummoners}"/>
+  
+  <property name="module.jdk.home.runicsummoners" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.runicsummoners" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.runicsummoners" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.runicsummoners" value="-encoding windows-1250 -source 8 ${compiler.args}"/>
+  
+  <property name="runicsummoners.output.dir" value="${module.runicsummoners.basedir}/out/production/RunicSummoners"/>
+  <property name="runicsummoners.testoutput.dir" value="${module.runicsummoners.basedir}/out/test/RunicSummoners"/>
+  
+  <path id="runicsummoners.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="runicsummoners.module.production.classpath">
+    <path refid="${module.jdk.classpath.runicsummoners}"/>
+  </path>
+  
+  <path id="runicsummoners.runtime.production.module.classpath">
+    <pathelement location="${runicsummoners.output.dir}"/>
+  </path>
+  
+  <path id="runicsummoners.module.classpath">
+    <path refid="${module.jdk.classpath.runicsummoners}"/>
+    <pathelement location="${runicsummoners.output.dir}"/>
+  </path>
+  
+  <path id="runicsummoners.runtime.module.classpath">
+    <pathelement location="${runicsummoners.testoutput.dir}"/>
+    <pathelement location="${runicsummoners.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.runicsummoners">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.runicsummoners">
+    <patternset refid="excluded.from.module.runicsummoners"/>
+  </patternset>
+  
+  
+  <target name="compile.module.runicsummoners" depends="compile.module.runicsummoners.production,compile.module.runicsummoners.tests" description="Compile module RunicSummoners"/>
+  
+  <target name="compile.module.runicsummoners.production" depends="register.custom.compilers" description="Compile module RunicSummoners; production classes"/>
+  
+  <target name="compile.module.runicsummoners.tests" depends="register.custom.compilers,compile.module.runicsummoners.production" description="compile module RunicSummoners; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.runicsummoners" description="cleanup module">
+    <delete dir="${runicsummoners.output.dir}"/>
+    <delete dir="${runicsummoners.testoutput.dir}"/>
+  </target>
+</project>

@@ -10,6 +10,10 @@ import com.badlogic.gdx.utils.Array;
  * Created by Nothrim on 2015-08-20.
  */
 public class AnimationData {
+    public static final String WALK_KEY="walk";
+    public static final String ATTACK_KEY="attack";
+    public static final String STANCE_KEY="stance";
+    public static final String JUMP_KEY="jump";
     public Array<TextureRegion>walk;
     public Array<TextureRegion>attack;
     public Array<TextureRegion>stance;
@@ -21,10 +25,10 @@ public class AnimationData {
         int cjump=0;
         for(TextureAtlas.AtlasRegion r : atlas.getRegions())
         {
-            if(r.toString().contains("walk"))cwalk++;
-            if(r.toString().contains("attack"))cattack++;
-            if(r.toString().contains("stance"))cstance++;
-            if(r.toString().contains("jump"))cjump++;
+            if(r.toString().contains(WALK_KEY))cwalk++;
+            if(r.toString().contains(ATTACK_KEY))cattack++;
+            if(r.toString().contains(STANCE_KEY))cstance++;
+            if(r.toString().contains(JUMP_KEY))cjump++;
 
         }
         walk=new Array<>(true,cwalk);
@@ -33,19 +37,19 @@ public class AnimationData {
         jump= new Array<>(true,cjump);
         for(TextureAtlas.AtlasRegion r : atlas.getRegions())
         {
-            if(r.toString().contains("walk"))
+            if(r.toString().contains(WALK_KEY))
             {
                 walk.add(r);
             }
-            if(r.toString().contains("attack"))
+            if(r.toString().contains(ATTACK_KEY))
             {
                attack.add(r);
             }
-            if(r.toString().contains("stance"))
+            if(r.toString().contains(STANCE_KEY))
             {
                stance.add(r);
             }
-            if(r.toString().contains("jump"))
+            if(r.toString().contains(JUMP_KEY))
             {
                 jump.add(r);
             }

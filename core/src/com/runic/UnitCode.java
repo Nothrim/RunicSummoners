@@ -6,6 +6,7 @@ package com.runic;
 public class UnitCode {
     private int type;
     private String name;
+    private int specialCharacterPosition;
     public UnitCode()
     {
 
@@ -14,6 +15,14 @@ public class UnitCode {
     {
         this.type=type;
         this.name=name;
+    }
+
+    public int getSpecialCharacterPosition() {
+        return specialCharacterPosition;
+    }
+
+    public void setSpecialCharacterPosition(int specialCharacterPosition) {
+        this.specialCharacterPosition = specialCharacterPosition;
     }
 
     public int getType() {

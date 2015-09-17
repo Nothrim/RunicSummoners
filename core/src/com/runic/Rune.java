@@ -2,6 +2,7 @@ package com.runic;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
  * Created by Nothrim on 2015-08-13.
@@ -40,6 +41,66 @@ public class Rune extends Sprite {
             this.setTexture(Assets.getInstance().RuneBlank.getTexture());
             this.id=0;
         }
+    }
+    public static TextureRegion getTextureRegion(int id) {
+        TextureRegion region;
+        switch (id) {
+            case 0:
+                region = Assets.getInstance().atlas.findRegion("RuneSword");
+                break;
+            case 1:
+                region = Assets.getInstance().atlas.findRegion("RuneArrow");
+                break;
+            case 2:
+                region = Assets.getInstance().atlas.findRegion("RuneBeast");
+                break;
+            case 3:
+                region = Assets.getInstance().atlas.findRegion("RuneEarth");
+                break;
+            case 4:
+                region = Assets.getInstance().atlas.findRegion("RuneFire");
+                break;
+            case 5:
+                region = Assets.getInstance().atlas.findRegion("RuneLife");
+                break;
+            case 6:
+                region = Assets.getInstance().atlas.findRegion("RuneLight");
+                break;
+            case 7:
+                region = Assets.getInstance().atlas.findRegion("RuneLightning");
+                break;
+            case 8:
+                region = Assets.getInstance().atlas.findRegion("RuneMiasma");
+                break;
+            case 9:
+                region = Assets.getInstance().atlas.findRegion("RuneMoon");
+                break;
+            case 10:
+                region = Assets.getInstance().atlas.findRegion("RunePlant");
+                break;
+            case 11:
+                region = Assets.getInstance().atlas.findRegion("RuneProtection");
+                break;
+            case 12:
+                region = Assets.getInstance().atlas.findRegion("RuneShadow");
+                break;
+            case 13:
+                region = Assets.getInstance().atlas.findRegion("RuneSky");
+                break;
+            case 14:
+                region = Assets.getInstance().atlas.findRegion("RuneSpell");
+                break;
+            case 15:
+                region = Assets.getInstance().atlas.findRegion("RuneSun");
+                break;
+            case 16:
+                region = Assets.getInstance().atlas.findRegion("RuneUnderground");
+                break;
+            default:
+                region = Assets.getInstance().atlas.findRegion("RuneBlank");
+
+        }
+        return region;
     }
     public static Sprite loadSprite(int id)
     {

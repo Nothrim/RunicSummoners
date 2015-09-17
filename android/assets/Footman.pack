@@ -17,51 +17,86 @@ attack1
   orig: 32, 32
   offset: 0, 0
   index: -1
-jump0
+gore0
   rotate: false
   xy: 69, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-stance0
+gore1
   rotate: false
   xy: 103, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-stance1
+gore2
   rotate: false
   xy: 137, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-walk0
+gore3
   rotate: false
   xy: 171, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-walk1
+gore4
   rotate: false
   xy: 205, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-walk2
+jump0
   rotate: false
   xy: 239, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-walk3
+stance0
   rotate: false
   xy: 273, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+stance1
+  rotate: false
+  xy: 307, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+walk0
+  rotate: false
+  xy: 341, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+walk1
+  rotate: false
+  xy: 375, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+walk2
+  rotate: false
+  xy: 409, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+walk3
+  rotate: false
+  xy: 443, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

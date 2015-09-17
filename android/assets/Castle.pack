@@ -1,0 +1,40 @@
+
+Castle.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Castle0
+  rotate: false
+  xy: 1, 1
+  size: 200, 350
+  orig: 200, 350
+  offset: 0, 0
+  index: -1
+Castle1
+  rotate: false
+  xy: 203, 1
+  size: 200, 350
+  orig: 200, 350
+  offset: 0, 0
+  index: -1
+Castle2
+  rotate: false
+  xy: 405, 1
+  size: 200, 350
+  orig: 200, 350
+  offset: 0, 0
+  index: -1
+Castle3
+  rotate: false
+  xy: 607, 1
+  size: 200, 350
+  orig: 200, 350
+  offset: 0, 0
+  index: -1
+Castle4
+  rotate: false
+  xy: 809, 1
+  size: 200, 350
+  orig: 200, 350
+  offset: 0, 0
+  index: -1
