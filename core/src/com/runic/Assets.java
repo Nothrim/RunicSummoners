@@ -26,6 +26,14 @@ public class Assets {
     public TextureAtlas BloodKnight=new TextureAtlas("BloodKnight.pack");
     public AnimationData BloodKnightAnimation=new AnimationData(BloodKnight);
     public GoreData BloodKnightGore=new GoreData(BloodKnight);
+    //archer
+    public TextureAtlas Archer=new TextureAtlas("Archer.pack");
+    public AnimationData ArcherAnimation=new AnimationData(Archer);
+    public GoreData ArcherGore=new GoreData(Archer);
+    //energy cloud
+    public TextureAtlas EnergyCloud=new TextureAtlas("EnergyCloud.pack");
+    public AnimationData EnergyCloudAnimation=new AnimationData(EnergyCloud);
+    public GoreData EnergyCloudGore=new GoreData(EnergyCloud);
     //runes
     public Sprite RuneBlank=atlas.createSprite("RuneBlank");
     public Sprite RuneArrow;
@@ -50,9 +58,12 @@ public class Assets {
     public BitmapFont StandardFontSmall =new BitmapFont(Gdx.files.internal("StandardFont.fnt"));
     //particle effects
     public ParticleEffect Blood=new ParticleEffect();
+    public ParticleEffect EnergyExplosion=new ParticleEffect();
     //sound effects
     public Sound ArrowFlying=Gdx.audio.newSound(Gdx.files.internal("SoundEffects/ArrowFlying.wav"));
     public Sound ArrowGround=Gdx.audio.newSound(Gdx.files.internal("SoundEffects/ArrowGround.wav"));
+    public Sound ArrowGround2=Gdx.audio.newSound(Gdx.files.internal("SoundEffects/ArrowGround2.wav"));
+    public Sound ArrowGround3=Gdx.audio.newSound(Gdx.files.internal("SoundEffects/ArrowGround3.wav"));
     public Sound ArrowFlesh=Gdx.audio.newSound(Gdx.files.internal("SoundEffects/ArrowFlesh.wav"));
     public void initialize(){
     dispose();
@@ -90,11 +101,24 @@ public class Assets {
         BloodKnight=new TextureAtlas("BloodKnight.pack");
         BloodKnightAnimation=new AnimationData(BloodKnight);
         BloodKnightGore=new GoreData(BloodKnight);
+        //archer
+        Archer=new TextureAtlas("Archer.pack");
+        ArcherAnimation=new AnimationData(Archer);
+        ArcherGore=new GoreData(Archer);
+        //energy cloud
+        EnergyCloud=new TextureAtlas("EnergyCloud.pack");
+        EnergyCloudAnimation=new AnimationData(EnergyCloud);
+        EnergyCloudGore=new GoreData(EnergyCloud);
+        //particle effects
         Blood=new ParticleEffect();
         Blood.load(Gdx.files.local("Blood"), Gdx.files.local(""));
+        EnergyExplosion=new ParticleEffect();
+        EnergyExplosion.load(Gdx.files.local("ParticleEffects/Lightning"),Gdx.files.local(""));
         //sound effects
         ArrowFlying=Gdx.audio.newSound(Gdx.files.internal("SoundEffects/ArrowFlying.wav"));
         ArrowGround=Gdx.audio.newSound(Gdx.files.internal("SoundEffects/ArrowGround.wav"));
+        ArrowGround2=Gdx.audio.newSound(Gdx.files.internal("SoundEffects/ArrowGround2.wav"));
+        ArrowGround3=Gdx.audio.newSound(Gdx.files.internal("SoundEffects/ArrowGround3.wav"));
         ArrowFlesh=Gdx.audio.newSound(Gdx.files.internal("SoundEffects/ArrowFlesh.wav"));
     }
     public Assets(){initialize();}
@@ -107,13 +131,18 @@ public class Assets {
         StandardFontSmall.dispose();
         background.dispose();
         BloodKnight.dispose();
+        Archer.dispose();
+        EnergyCloud.dispose();
         //projectiles
         Blood.dispose();
+        EnergyExplosion.dispose();
         projectiles.dispose();
         //sounds
         ArrowFlying.dispose();
         ArrowFlesh.dispose();
         ArrowGround.dispose();
+        ArrowGround2.dispose();
+        ArrowGround3.dispose();
     }
     public static Assets getInstance(){
         if(instance==null) {

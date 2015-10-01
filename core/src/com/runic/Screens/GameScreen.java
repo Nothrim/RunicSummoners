@@ -14,7 +14,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.runic.*;
+import com.runic.Effects.Line;
 import com.runic.Effects.PolygonEffect;
+import com.runic.Effects.SpriteEffect;
+import com.runic.Particles.PremadeEffect;
 import com.runic.Projectiles.BaseProjectile;
 import com.runic.Units.BaseUnit;
 import com.runic.Units.Dummy;
@@ -106,7 +109,9 @@ public class GameScreen extends Screen {
         BaseProjectile.initialize((TiledMapTileLayer)map.getLayers().get(0));
         Dummy.initialize();
         PolygonEffect.initialize();
-        polygonSpriteBatch=new PolygonSpriteBatch(100);
+        PremadeEffect.initialize();
+        SpriteEffect.initialze(1000);
+        polygonSpriteBatch=new PolygonSpriteBatch(500);
         super.show();
     }
 
@@ -195,6 +200,8 @@ public class GameScreen extends Screen {
             sb.setShader(blurShader);
             sb.draw(blurFramePass.getColorBufferTexture(), 0, 0, GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT);
         }
+        sb.setShader(combatTextShader);
+        SpriteEffect.Draw(delta, sb);
         sb.setShader(null);
         Assets.getInstance().StandardFontSmall.draw(sb, Integer.toString((int) RefillTimer), 960, 1070);
         p1.draw(sb);
@@ -203,13 +210,16 @@ public class GameScreen extends Screen {
         CombatText.draw(sb);
         sb.setShader(null);
         Gore.Draw(sb);
-        BaseProjectile.drawProjectiles(sb,delta);
+        BaseProjectile.drawProjectiles(sb, delta);
         sb.end();
         mapRenderer.setView((OrthographicCamera) GameCamera);
         mapRenderer.render();
         ParticleRenderer.setProjectionMatrix(GameView.getCamera().combined);
         ParticleRenderer.begin();
+
         BaseUnit.drawParticles(ParticleRenderer, delta);
+        PremadeEffect.drawParticles(ParticleRenderer, delta);
+
         ParticleRenderer.end();
 
         shapeRenderer.setProjectionMatrix(GameView.getCamera().combined);
@@ -217,6 +227,7 @@ public class GameScreen extends Screen {
             Gdx.gl.glEnable(GL10.GL_BLEND);
             Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
             shapeRenderer.setColor(PolygonEffect.blinkingColor.getValue(delta), 0.5f, 0, 0.3f);
             if(p1.getCurrentCombination()!=null) {
 

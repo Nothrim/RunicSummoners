@@ -1,0 +1,124 @@
+
+Archer.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+attack0
+  rotate: false
+  xy: 1, 205
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1
+attack1
+  rotate: false
+  xy: 1, 171
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1
+attack2
+  rotate: false
+  xy: 19, 205
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1
+gore0
+  rotate: false
+  xy: 1, 137
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1
+gore1
+  rotate: false
+  xy: 19, 171
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1
+gore2
+  rotate: false
+  xy: 37, 205
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1
+gore3
+  rotate: false
+  xy: 1, 103
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1
+gore4
+  rotate: false
+  xy: 19, 137
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1
+gore5
+  rotate: false
+  xy: 37, 171
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1
+jump0
+  rotate: false
+  xy: 1, 69
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1
+stance0
+  rotate: false
+  xy: 19, 103
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1
+stance1
+  rotate: false
+  xy: 37, 137
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1
+walk0
+  rotate: false
+  xy: 1, 35
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1
+walk1
+  rotate: false
+  xy: 19, 69
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1
+walk2
+  rotate: false
+  xy: 37, 103
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1
+walk3
+  rotate: false
+  xy: 1, 1
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1
+walk4
+  rotate: false
+  xy: 19, 35
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1

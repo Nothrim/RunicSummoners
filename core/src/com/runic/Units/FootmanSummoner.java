@@ -13,7 +13,7 @@ public class FootmanSummoner extends Dummy {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        if(life%15==0)
+        if(life%60==0)
             owner.spawnUnit(new Footman(owner,x,y));
     }
 }

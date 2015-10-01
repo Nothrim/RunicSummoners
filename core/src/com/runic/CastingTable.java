@@ -59,9 +59,13 @@ public class CastingTable {
             if(Combinations.getCombination(combination.toString()).getType()==0)
             owner.spawnUnit(new Footman(owner, BaseUnit.TYPE.LAND,5,10,5,BaseUnit.MELEE_RANGE,30,owner.castle.getSpawnpoint(),200,1,Assets.getInstance().FootmanAnimation,8));
             else if(Combinations.getCombination(combination.toString()).getType()==1) {
+                owner.spawnUnit(new Archer(owner,owner.castle.getSpawnpoint(),200));
             }
             else if(Combinations.getCombination(combination.toString()).getType()==2) {
                 owner.spawnUnit(new BloodKnight(owner,owner.castle.getSpawnpoint(),200));
+            }
+            else if(Combinations.getCombination(combination.toString()).getType()==3){
+                owner.spawnUnit(new EnergyCloud(owner,owner.castle.getSpawnpoint(),620));
             }
             else if(Combinations.getCombination(combination.toString()).getType()==1000) {
                     Dummy.newDummy(new DummyArrow(owner.getCastle().getSpawnpoint(), owner.getCastle().getY() + 100, owner, 180));
@@ -77,7 +81,7 @@ public class CastingTable {
             }
             else if(Combinations.getCombination(combination.toString()).getType()==1002)
             {
-                Dummy.newDummy(new FootmanSummoner(owner.getCastle().getSpawnpoint(), owner.getCastle().getY() + 100, owner, 80));
+                Dummy.newDummy(new FootmanSummoner(owner.getCastle().getSpawnpoint(), owner.getCastle().getY() + 100, owner, 420));
             }
             else if(Combinations.getCombination(combination.toString()).getType()==1003)
             {

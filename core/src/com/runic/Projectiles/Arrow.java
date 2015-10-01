@@ -18,7 +18,7 @@ public class Arrow extends BaseProjectile {
         super(x, y, move, damage, owner);
         this.velocityX = velocityX;
         this.velocityY = velocityY;
-        Assets.getInstance().ArrowFlying.play(0.3f);
+        Assets.getInstance().ArrowFlying.play(0.09f);
     }
 
     private float rotation = 1;
@@ -30,15 +30,27 @@ public class Arrow extends BaseProjectile {
             life -= deltaTime;
         else
             active = false;
+        rotation = (float) Math.atan2((double) velocityY, (double) velocityX);
         if (ground != null) {
             if (ground.getCell((int) ((x + velocityX) / 8), (int) ((y + velocityY) / 8)) == null) {
                 velocityY -= 10*deltaTime;
                 x += velocityX;
                 y += velocityY;
-                rotation = (float) Math.atan2((double) velocityY, (double) velocityX);
+
             } else {
                 if (life > 10) {
-                    Assets.getInstance().ArrowGround.play(0.3f);
+                    switch (MathUtils.random(3))
+                    {
+                        case 0:
+                            Assets.getInstance().ArrowGround.play(0.05f);
+                            break;
+                        case 1:
+                            Assets.getInstance().ArrowGround2.play(0.05f);
+                            break;
+                        default:
+                            Assets.getInstance().ArrowGround3.play(0.05f);
+                    }
+
                     life = 10;
                 }
             }
@@ -54,8 +66,8 @@ public class Arrow extends BaseProjectile {
             if (u != null && u.isActive() && !u.isImmune()) {
                 if (Intersector.intersectRectangles(u.getHitbox(),new Rectangle(x,y,8,8),Rectangle.tmp)) {
                     u.hurt(damage);
-                    Assets.getInstance().ArrowFlesh.play(0.3f);
-                    life = 9;
+                    Assets.getInstance().ArrowFlesh.play(0.09f);
+                    life = 0;
                     return;
                 }
             }
@@ -64,6 +76,6 @@ public class Arrow extends BaseProjectile {
     @Override
     public void draw(SpriteBatch sb, float deltaTime) {
         super.draw(sb, deltaTime);
-        sb.draw(move.getKeyFrame(0), x, y, 8, 8, 16, 16, 1, 1, MathUtils.radiansToDegrees*rotation,true);
+        sb.draw(move.getKeyFrame(0), x, y, 8, 8, 16, 16, 1, 1, MathUtils.radiansToDegrees*rotation+32,true);
     }
 }

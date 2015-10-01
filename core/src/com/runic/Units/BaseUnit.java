@@ -21,6 +21,7 @@ public class BaseUnit {
     Player owner;
     public final static float MELEE_RANGE=10;
     public final static float IMMUNE_TIME=0.35f;
+    public final static float SEARCH_FREQUENCY=0.3f;
     public enum TYPE {LAND,AIR,UNDERGROUND}
     protected static TiledMapTileLayer collisionLayer;
     public static void setCollisionLayer(TiledMapTileLayer layer){collisionLayer=layer;}
@@ -83,6 +84,31 @@ public class BaseUnit {
         attacking=false;
         walking=false;
         standing=false;
+
+    }
+    public BaseUnit(Player owner,TYPE type,int gold,int MaxHealth,int damage,int speed,float positionX,float positionY,float AttackSpeed)
+    {
+        this.owner=owner;
+        this.type=type;
+        this.gold=gold;
+        this.MaxHealth=MaxHealth;
+        this.health=MaxHealth;
+        this.damage=damage;
+        this.speed=speed;
+        this.positionX=positionX;
+        this.positionY=positionY;
+        this.AttackSpeed=AttackSpeed;
+        if(!initialized)
+        {
+            initialize();
+        }
+        hitbox=new Rectangle(positionX,positionY,walk.getKeyFrame(0).getRegionWidth(),walk.getKeyFrame(0).getRegionHeight());
+        immuneTimer=0;
+        if(owner.whoAmI()==0)
+            direction=1;
+        else
+            direction=-1;
+        intersection=new Rectangle();
 
     }
     public BaseUnit(Player owner,TYPE type,int gold,int MaxHealth,int damage,float AttackRange,int speed,float positionX,float positionY,float AttackSpeed,AnimationData animationData,float AnimationSpeed)
@@ -157,7 +183,7 @@ public class BaseUnit {
                 CombatText.create(Integer.toString(DamageDealt), getX() + MathUtils.random(-10, 10), getY() + MathUtils.random(30, 50),0.5f,0);
             }
             else
-                CombatText.create(Integer.toString(DamageDealt), getX() + MathUtils.random(-10, 10), getY() + MathUtils.random(30, 50),0,0.5f);
+                CombatText.create(Integer.toString(DamageDealt), getX()+hitbox.getWidth()/2 + MathUtils.random(-10, 10), getY() + MathUtils.random(30, 50),0,0.5f);
             ParticleEffectPool.PooledEffect effect = BloodParticles.obtain();
             effect.setPosition(positionX,positionY);
             effects.add(effect);

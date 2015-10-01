@@ -31,6 +31,7 @@ public class Combinations {
             Units.put("0",new UnitCode(0,"Footman"));
             Units.put("1",new UnitCode(1,"Archer"));
             Units.put("5.4",new UnitCode(2,"BloodKnight"));
+            Units.put("13.7",new UnitCode(3,"EnergyCloud"));
             Units.put("14.1.14",new UnitCode(1000,"RainOfArrows"));
             Units.put("14.15.x.9.14",new UnitCode(1001,"FateTwist"));
             Units.put("14.0.6.0.14",new UnitCode(1002,"ToArms!"));

@@ -125,7 +125,7 @@ public class Footman extends BaseUnit {
             JumpTime=0;
         }
 
-        if(searchTimer>1)
+        if(searchTimer>SEARCH_FREQUENCY)
         {
 
             searchTimer=0;

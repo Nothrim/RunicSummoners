@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.runic.Effects.BendingRune;
+import com.runic.Effects.PolygonEffect;
 import com.runic.Units.BaseUnit;
 import com.runic.Units.Footman;
 
@@ -278,8 +280,10 @@ public class Player extends InputAdapter{
         for(int i=0;i<RunesTable.length;i++){
             if(MathUtils.random(0,chanceOfFailure)!=0)
                RunesTable[i] = new Rune(Rune.loadSprite(-1),id,Rune.loadName(-1),RunesTable[i].getX(),RunesTable[i].getY(),true);
-            else
-                RunesTable[i] = new Rune(Rune.loadSprite(id),id,Rune.loadName(id),RunesTable[i].getX(),RunesTable[i].getY(),false);
+            else {
+                PolygonEffect.create(new BendingRune(1,castle.getSpawnpoint(),1100,RunesTable[i].getX(),RunesTable[i].getY(),this));
+                RunesTable[i] = new Rune(Rune.loadSprite(id), id, Rune.loadName(id), RunesTable[i].getX(), RunesTable[i].getY(), false);
+            }
             }
     }
     public void lose()
