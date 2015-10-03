@@ -1,5 +1,6 @@
 package com.runic;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -25,7 +26,7 @@ public class Castle {
     private float health60;
     private float health30;
     private float health15;
-
+    private float immuneTimer=0;
 
     public float getX() {
         return x;
@@ -52,6 +53,13 @@ public class Castle {
         health15=health*0.15f;
     }
     public void draw(SpriteBatch sb){
+        if(immune)
+            immuneTimer+= Gdx.graphics.getDeltaTime();
+        if(immuneTimer>0.25f)
+        {
+            immuneTimer=0;
+            immune=false;
+        }
         TextureRegion texture;
         if (health>health80)
             texture=Assets.getInstance().Castle.findRegion("Castle0");
@@ -79,6 +87,7 @@ public class Castle {
     {
         if(immune)return false;
         else {
+            immune=true;
             int random = MathUtils.random(dmg / 2, dmg);
             CombatText.create(Integer.toString(random), spawnpoint, y);
             health -= random;

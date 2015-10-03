@@ -18,6 +18,11 @@
 	type: 3
 	name: EnergyCloud
 }
+16.3.16: {
+	class: com.runic.UnitCode
+	type: 4
+	name: EarthWorm
+}
 14.1.14: {
 	class: com.runic.UnitCode
 	type: 1000

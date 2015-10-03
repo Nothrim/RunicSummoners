@@ -23,4 +23,8 @@ RELASE: {
 	class: java.lang.Integer
 	value: 66
 }
+HELP: {
+	class: java.lang.Integer
+	value: 60
+}
 }

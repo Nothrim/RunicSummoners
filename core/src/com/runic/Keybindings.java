@@ -30,7 +30,8 @@ public class Keybindings {
             Hotkeys1.put("LEFT", Input.Keys.LEFT);
             Hotkeys1.put("RIGHT", Input.Keys.RIGHT);
             Hotkeys1.put("SELECT", Input.Keys.SPACE);
-            Hotkeys1.put("RELASE", Input.Keys.B);
+            Hotkeys1.put("RELASE", Input.Keys.ENTER);
+            Hotkeys1.put("HELP",Input.Keys.SHIFT_RIGHT);
             config1.writeString(KeyLoader.prettyPrint(Hotkeys1, 0), false);
         }
         if(config2.exists()){
@@ -42,8 +43,9 @@ public class Keybindings {
             Hotkeys2.put("DOWN", Input.Keys.S);
             Hotkeys2.put("LEFT", Input.Keys.A);
             Hotkeys2.put("RIGHT", Input.Keys.D);
-            Hotkeys2.put("SELECT", Input.Keys.H);
-            Hotkeys2.put("RELASE", Input.Keys.J);
+            Hotkeys2.put("SELECT", Input.Keys.F);
+            Hotkeys2.put("RELASE", Input.Keys.G);
+            Hotkeys2.put("HELP",Input.Keys.H);
             config2.writeString(KeyLoader.prettyPrint(Hotkeys2, 0), true);
         }
     }

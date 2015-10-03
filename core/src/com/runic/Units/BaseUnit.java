@@ -102,7 +102,10 @@ public class BaseUnit {
         {
             initialize();
         }
+        if(walk!=null)
         hitbox=new Rectangle(positionX,positionY,walk.getKeyFrame(0).getRegionWidth(),walk.getKeyFrame(0).getRegionHeight());
+
+
         immuneTimer=0;
         if(owner.whoAmI()==0)
             direction=1;

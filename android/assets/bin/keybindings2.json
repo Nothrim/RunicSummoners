@@ -23,8 +23,8 @@ RELASE: {
 	class: java.lang.Integer
 	value: 35
 }
-Player 2: {
+HELP: {
 	class: java.lang.Integer
-	value: 51
+	value: 36
 }
 }

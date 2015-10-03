@@ -2,7 +2,6 @@ package com.runic.Screens;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.PolygonRegion;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -10,11 +9,9 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.runic.*;
-import com.runic.Effects.Line;
 import com.runic.Effects.PolygonEffect;
 import com.runic.Effects.SpriteEffect;
 import com.runic.Particles.PremadeEffect;
@@ -22,6 +19,7 @@ import com.runic.Projectiles.BaseProjectile;
 import com.runic.Units.BaseUnit;
 import com.runic.Units.Dummy;
 import com.runic.Units.Gore;
+import com.runic.Window.Window;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -39,6 +37,7 @@ public class GameScreen extends Screen {
     public static final int STANDARD_BUFFER_SIZE=512;
     SpriteBatch sb;
     SpriteBatch ParticleRenderer;
+    SpriteBatch windowRenderer;
     Camera GameCamera;
     FitViewport GameView;
     Player p1;
@@ -63,6 +62,7 @@ public class GameScreen extends Screen {
         mapRenderer.dispose();
         sb.dispose();
         ParticleRenderer.dispose();
+        windowRenderer.dispose();
         p1.dispose();
         p2.dispose();
         shapeRenderer.dispose();
@@ -86,6 +86,7 @@ public class GameScreen extends Screen {
         mapRenderer=new OrthogonalTiledMapRenderer(map,1);
         sb=new SpriteBatch();
         ParticleRenderer=new SpriteBatch();
+        windowRenderer=new SpriteBatch();
         Combinations.Load();
         GameCamera=new OrthographicCamera();
         p1=new Player(0,new Vector2(0,1080),0);
@@ -111,8 +112,10 @@ public class GameScreen extends Screen {
         PolygonEffect.initialize();
         PremadeEffect.initialize();
         SpriteEffect.initialze(1000);
+        Window.initialize(10);
         polygonSpriteBatch=new PolygonSpriteBatch(500);
         super.show();
+
     }
 
 
@@ -179,6 +182,7 @@ public class GameScreen extends Screen {
 
         }
 
+        sb.setProjectionMatrix(GameView.getCamera().combined);
         sb.begin();
         //maybe if i will need to use double buffer this will be helpfull, unused cause i need vertical blur only
 //        if(p1.isCasting() || p2.isCasting()) {
@@ -193,7 +197,7 @@ public class GameScreen extends Screen {
 //
 //        }
 
-        sb.setProjectionMatrix(GameView.getCamera().combined);
+
         sb.setShader(null);
         sb.draw(Assets.getInstance().background, 0, 0);
         if(p1.isCasting() || p2.isCasting()) {
@@ -204,16 +208,20 @@ public class GameScreen extends Screen {
         SpriteEffect.Draw(delta, sb);
         sb.setShader(null);
         Assets.getInstance().StandardFontSmall.draw(sb, Integer.toString((int) RefillTimer), 960, 1070);
+        sb.end();
+        mapRenderer.setView((OrthographicCamera) GameCamera);
+        mapRenderer.render();
+        sb.begin();
         p1.draw(sb);
         p2.draw(sb);
+
         sb.setShader(combatTextShader);
         CombatText.draw(sb);
         sb.setShader(null);
         Gore.Draw(sb);
         BaseProjectile.drawProjectiles(sb, delta);
         sb.end();
-        mapRenderer.setView((OrthographicCamera) GameCamera);
-        mapRenderer.render();
+
         ParticleRenderer.setProjectionMatrix(GameView.getCamera().combined);
         ParticleRenderer.begin();
 
@@ -255,12 +263,23 @@ public class GameScreen extends Screen {
         }
         if(PolygonEffect.polygonEffects[0]!=null)
         {
+
             polygonSpriteBatch.setProjectionMatrix(GameView.getCamera().combined);
             polygonSpriteBatch.begin();
             polygonSpriteBatch.setShader(polygonEffectShader);
             PolygonEffect.Draw(polygonSpriteBatch, delta);
             polygonSpriteBatch.end();
         }
+        if(Window.windows[0]!=null) {
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            Window.DrawBox(shapeRenderer);
+            shapeRenderer.end();
+            windowRenderer.setProjectionMatrix(GameView.getCamera().combined);
+            windowRenderer.begin();
+            Window.DrawContent(windowRenderer,delta);
+            windowRenderer.end();
+        }
+
     }
 
     @Override

@@ -11,11 +11,14 @@ import com.runic.Effects.BendingRune;
 import com.runic.Effects.PolygonEffect;
 import com.runic.Units.BaseUnit;
 import com.runic.Units.Footman;
+import com.runic.Window.HelpWindow;
+import com.runic.Window.Window;
 
 /**
  * Created by Nothrim on 2015-08-07.
  */
 public class Player extends InputAdapter{
+    public HelpWindow helpWindow=null;
     public Player enemy;
     public static final int RUNE_TABLE_SIZE=50;
     private Vector2 Origin;
@@ -83,6 +86,18 @@ public class Player extends InputAdapter{
             } else if (keycode == Keybindings.Hotkeys1.get("RELASE")) {
                 castingTable.cast();
             }
+            else if (keycode == Keybindings.Hotkeys1.get("HELP")) {
+                if(helpWindow==null || !helpWindow.isActive())
+                {
+                    helpWindow=new HelpWindow(this);
+                    Window.create(helpWindow);
+                }
+                else
+                {
+                    helpWindow.close();
+                }
+            }
+
         }
         else if(id==1)
         {
@@ -109,7 +124,21 @@ public class Player extends InputAdapter{
             } else if (keycode == Keybindings.Hotkeys2.get("RELASE")) {
                 castingTable.cast();
             }
+            else if (keycode == Keybindings.Hotkeys2.get("HELP")) {
+                if(helpWindow==null || !helpWindow.isActive())
+                {
+                    helpWindow=new HelpWindow(this);
+                    Window.create(helpWindow);
+                }
+                else
+                {
+                    helpWindow.close();
+                }
+
+            }
+
         }
+
         return super.keyUp(keycode);
     }
 

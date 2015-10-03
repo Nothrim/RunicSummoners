@@ -67,6 +67,10 @@ public class CastingTable {
             else if(Combinations.getCombination(combination.toString()).getType()==3){
                 owner.spawnUnit(new EnergyCloud(owner,owner.castle.getSpawnpoint(),620));
             }
+            else if(Combinations.getCombination(combination.toString()).getType()==4)
+            {
+                owner.spawnUnit(new EarthWorm(owner,owner.getCastle().getSpawnpoint(),0,MathUtils.random(5,8)));
+            }
             else if(Combinations.getCombination(combination.toString()).getType()==1000) {
                     Dummy.newDummy(new DummyArrow(owner.getCastle().getSpawnpoint(), owner.getCastle().getY() + 100, owner, 180));
 

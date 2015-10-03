@@ -10,7 +10,7 @@ import java.util.LinkedHashMap;
  * Created by Nothrim on 2015-08-14.
  */
 public class Combinations {
-    private static LinkedHashMap<String,UnitCode> Units=new LinkedHashMap<String,UnitCode>();
+    public static LinkedHashMap<String,UnitCode> Units=new LinkedHashMap<String,UnitCode>();
     private static StringBuilder stringBuilder;
     private static String[]SPECIAL_COMBINATIONS=
             {
@@ -32,6 +32,7 @@ public class Combinations {
             Units.put("1",new UnitCode(1,"Archer"));
             Units.put("5.4",new UnitCode(2,"BloodKnight"));
             Units.put("13.7",new UnitCode(3,"EnergyCloud"));
+            Units.put("16.3.16",new UnitCode(4,"EarthWorm"));
             Units.put("14.1.14",new UnitCode(1000,"RainOfArrows"));
             Units.put("14.15.x.9.14",new UnitCode(1001,"FateTwist"));
             Units.put("14.0.6.0.14",new UnitCode(1002,"ToArms!"));
