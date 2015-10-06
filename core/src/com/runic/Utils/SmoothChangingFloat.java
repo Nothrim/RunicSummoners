@@ -16,6 +16,16 @@ public class SmoothChangingFloat {
         value=range1;
         hitBoundry=false;
     }
+    public SmoothChangingFloat(float range0,float range1,boolean startFromBegining)
+    {
+        this.range0=range0;
+        this.range1=range1;
+        if(!startFromBegining)
+        value=range1;
+        else
+        value=range0;
+        hitBoundry=false;
+    }
     public float getValue(float deltaTime)
     {
         if(!hitBoundry &&value >range0)

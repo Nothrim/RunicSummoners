@@ -2,7 +2,9 @@ package com.runic.Units;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.runic.AnimationData;
 import com.runic.Assets;
 import com.runic.Player;
@@ -20,6 +22,7 @@ public class BloodKnight extends BaseUnit {
     private float searchTimer=0;
     private int direction;
 
+
     public BloodKnight(Player owner, float positionX, float positionY) {
         super(owner, TYPE.LAND, 5, 60, 3,MELEE_RANGE, 15, positionX, positionY, 1.35f, Assets.getInstance().BloodKnightAnimation, 8);
         if(owner.whoAmI()==0)
@@ -33,9 +36,11 @@ public class BloodKnight extends BaseUnit {
         attack.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
     }
 
+
     @Override
     public void draw(Batch batch) {
         super.draw(batch);
+
         if(walking)
         {
             if(!jumping)
@@ -119,7 +124,8 @@ public class BloodKnight extends BaseUnit {
 
     @Override
     public void move(float DeltaTime, int direction) {
-        super.move(DeltaTime, direction);
+        hitbox.y=getY();
+        hitbox.x=getX()+hitbox.getWidth()*(direction==-1?1:0);
         if(collisionLayer.getCell(getWorldX(8),getWorldY(8))==null)
         {
             if(!jumping)

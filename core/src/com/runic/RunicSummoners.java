@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.runic.Screens.MainMenu;
 import com.uwsoft.editor.renderer.Overlap2D;
 
-public class Main extends Game {
+public class RunicSummoners extends Game {
 
 	
 	@Override

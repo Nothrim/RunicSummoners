@@ -127,4 +127,9 @@ public class TiledLight {
             }
         }
     }
+    public void setX(float x)
+    {
+        this.x=x;
+        this.mapX=x/scale;
+    }
 }

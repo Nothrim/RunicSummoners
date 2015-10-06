@@ -19,6 +19,7 @@ import com.runic.Projectiles.BaseProjectile;
 import com.runic.Units.BaseUnit;
 import com.runic.Units.Dummy;
 import com.runic.Units.Gore;
+import com.runic.Utils.SmoothChangingFloat;
 import com.runic.Window.Window;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -56,6 +57,7 @@ public class GameScreen extends Screen {
     PolygonSpriteBatch polygonSpriteBatch;
     //timers and stuff
     double RefillTimer=0;
+    SmoothChangingFloat sunPosition;
     @Override
     public void dispose() {
         map.dispose();
@@ -76,6 +78,7 @@ public class GameScreen extends Screen {
     @Override
     public void show()
     {
+        Assets.getInstance().disposeMenu();
         sunTimer=0;
         shapeRenderer=new ShapeRenderer();
         map= new TmxMapLoader().load("RunicSummonersMap.tmx");
@@ -114,6 +117,7 @@ public class GameScreen extends Screen {
         SpriteEffect.initialze(1000);
         Window.initialize(10);
         polygonSpriteBatch=new PolygonSpriteBatch(500);
+        sunPosition=new SmoothChangingFloat(0,GAME_SCREEN_WIDTH,true);
         super.show();
 
     }
@@ -128,10 +132,11 @@ public class GameScreen extends Screen {
         }
         else
         {
+            sun.setX(sunPosition.getValue(10));
             sunTimer=0;
-            if(sun.getX()>GAME_SCREEN_WIDTH)
-                sun.translate(-GAME_SCREEN_WIDTH,0);
-            sun.translate(10,0);
+//            if(sun.getX()>GAME_SCREEN_WIDTH)
+//                sun.translate(-GAME_SCREEN_WIDTH,0);
+//            sun.translate(10,0);
             sun.update(GAME_SCREEN_WIDTH);
         }
         if(RefillTimer<REFILL_TIME)

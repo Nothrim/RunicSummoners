@@ -6,6 +6,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,13 +19,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.runic.Assets;
 import org.w3c.dom.Text;
 
 /**
@@ -43,13 +42,12 @@ public class MainMenu extends  Screen {
 
         stage=new Stage(new ScreenViewport());
 
-        TextureAtlas atlas=new TextureAtlas("Menu.pack");
-        Skin MenuSkin=new Skin(atlas);
-        table=new Table(MenuSkin);
+
+        table=new Table(Assets.getInstance().MenuSkin);
         table.setFillParent(true);
         TextButton.TextButtonStyle MenuStyle=new TextButton.TextButtonStyle();
-        MenuStyle.up=MenuSkin.getDrawable("ButtonUp");
-        MenuStyle.down=MenuSkin.getDrawable("ButtonDown");
+        MenuStyle.up=Assets.getInstance().MenuSkin.getDrawable("ButtonUp");
+        MenuStyle.down=Assets.getInstance().MenuSkin.getDrawable("ButtonDown");
         MenuStyle.font=new BitmapFont(Gdx.files.internal("MenuFont.fnt"),false);
         TextButton button=new TextButton("START",MenuStyle);
         button.setName("0");
@@ -59,9 +57,15 @@ public class MainMenu extends  Screen {
         button.setName("1");
         table.add(button);
         table.row();
+        button=new TextButton("MULTIPLAYER",MenuStyle);
+        button.setName("3");
+        table.add(button);
+        table.row();
         button=new TextButton("EXIT", MenuStyle);
         button.setName("2");
         table.add(button);
+        table.row();
+       // table.add(new TextField("", Assets.getInstance().MenuSkin));
         Gdx.input.setInputProcessor(stage);
         table.addListener(new ChangeListener() {
             @Override
@@ -77,6 +81,9 @@ public class MainMenu extends  Screen {
                     case 2:
                         Gdx.app.exit();
                         break;
+                    case 3:
+                        game.setScreen(new NetMenu(game));
+                        break;
                     default:
                         System.out.println("Invaild input");
                 }
@@ -88,6 +95,7 @@ public class MainMenu extends  Screen {
 
     @Override
     public void render(float delta) {
+
        stage.act(delta);
         stage.draw();
         super.render(delta);

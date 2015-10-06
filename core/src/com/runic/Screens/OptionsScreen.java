@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.runic.Assets;
 import com.runic.Keybindings;
 import org.w3c.dom.ls.LSException;
 
@@ -32,8 +33,6 @@ public class OptionsScreen extends  Screen {
         Table table=new Table();
         table.setFillParent(true);
         Label.LabelStyle LStyle=new Label.LabelStyle(new BitmapFont(Gdx.files.internal("StandardFont.fnt")), com.badlogic.gdx.graphics.Color.BLACK.WHITE);
-
-        Skin BSkin=new Skin(new TextureAtlas("Options.pack"));
         String player;
         if(PlayerFlag)
         player="Player 1";
@@ -41,7 +40,7 @@ public class OptionsScreen extends  Screen {
         player="Player 2";
         table.add(new WhyImSoLazyLabel(player, LStyle));
         table.row();
-        ImageTextButton.ImageTextButtonStyle BStyle=new ImageTextButton.ImageTextButtonStyle(BSkin.getDrawable("OptionsBacground"),BSkin.getDrawable("OptionsBacgroundClicked"),BSkin.getDrawable("OptionsSelection"),LStyle.font);
+        ImageTextButton.ImageTextButtonStyle BStyle=new ImageTextButton.ImageTextButtonStyle(Assets.getInstance().BSkin.getDrawable("OptionsBacground"),Assets.getInstance().BSkin.getDrawable("OptionsBacgroundClicked"),Assets.getInstance().BSkin.getDrawable("OptionsSelection"),LStyle.font);
         for (Map.Entry<String,Integer> kvp : Keybindings.Hotkeys1.entrySet())
         {
             table.add(new Label(kvp.getKey(),LStyle)).width(50).height(30);
@@ -211,7 +210,6 @@ public class OptionsScreen extends  Screen {
     public void dispose() {
 
         stage.dispose();
-
         super.dispose();
     }
 }

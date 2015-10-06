@@ -182,11 +182,12 @@ public class BaseUnit {
             immune=true;
             int DamageDealt=MathUtils.random(damage / 2, damage);
             health-=DamageDealt;
-            if(owner.whoAmI()==1) {
-                CombatText.create(Integer.toString(DamageDealt), getX() + MathUtils.random(-10, 10), getY() + MathUtils.random(30, 50),0.5f,0);
+            if(DamageDealt>0) {
+                if (owner.whoAmI() == 1) {
+                    CombatText.create(Integer.toString(DamageDealt), getX() +hitbox.getWidth() / 2+ MathUtils.random(-10, 10), getY() + MathUtils.random(30, 50), 0.5f, 0);
+                } else
+                    CombatText.create(Integer.toString(DamageDealt), getX() - hitbox.getWidth() / 2 + MathUtils.random(-10, 10), getY() + MathUtils.random(30, 50), 0, 0.5f);
             }
-            else
-                CombatText.create(Integer.toString(DamageDealt), getX()+hitbox.getWidth()/2 + MathUtils.random(-10, 10), getY() + MathUtils.random(30, 50),0,0.5f);
             ParticleEffectPool.PooledEffect effect = BloodParticles.obtain();
             effect.setPosition(positionX,positionY);
             effects.add(effect);

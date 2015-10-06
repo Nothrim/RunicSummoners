@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 /**
  * Created by Nothrim on 2015-08-12.
@@ -55,6 +58,7 @@ public class Assets {
     public Sprite RuneUnderground;
     public Texture Selector=new Texture("Selector.png");
     public Texture background=new Texture("Background.png");
+
     public BitmapFont StandardFontSmall =new BitmapFont(Gdx.files.internal("StandardFont.fnt"));
     //particle effects
     public ParticleEffect Blood=new ParticleEffect();
@@ -65,6 +69,12 @@ public class Assets {
     public Sound ArrowGround2=Gdx.audio.newSound(Gdx.files.internal("SoundEffects/ArrowGround2.wav"));
     public Sound ArrowGround3=Gdx.audio.newSound(Gdx.files.internal("SoundEffects/ArrowGround3.wav"));
     public Sound ArrowFlesh=Gdx.audio.newSound(Gdx.files.internal("SoundEffects/ArrowFlesh.wav"));
+    //menu
+    public TextureAtlas MenuAtlas=new TextureAtlas("Menu.pack");
+    public Skin MenuSkin=new Skin(MenuAtlas);
+    public TextureAtlas Options=new TextureAtlas("Options.pack");
+    public Skin BSkin=new Skin(Options);
+    public BitmapFont NormalFont=new BitmapFont(Gdx.files.internal("Normal.fnt"));
     public void initialize(){
     dispose();
     atlas=new TextureAtlas("Runes.pack");
@@ -120,6 +130,14 @@ public class Assets {
         ArrowGround2=Gdx.audio.newSound(Gdx.files.internal("SoundEffects/ArrowGround2.wav"));
         ArrowGround3=Gdx.audio.newSound(Gdx.files.internal("SoundEffects/ArrowGround3.wav"));
         ArrowFlesh=Gdx.audio.newSound(Gdx.files.internal("SoundEffects/ArrowFlesh.wav"));
+        //menu
+        MenuAtlas=new TextureAtlas("Menu.pack");
+        MenuSkin=new Skin(MenuAtlas);
+        Options=new TextureAtlas("Options.pack");
+        BSkin=new Skin(Options);
+        NormalFont=new BitmapFont(Gdx.files.internal("Normal.fnt"));
+
+
     }
     public Assets(){initialize();}
     public void dispose(){
@@ -143,12 +161,25 @@ public class Assets {
         ArrowGround.dispose();
         ArrowGround2.dispose();
         ArrowGround3.dispose();
+        //menu
+        MenuSkin.dispose();
+        MenuAtlas.dispose();
+        Options.dispose();
+        BSkin.dispose();
+        NormalFont.dispose();
     }
     public static Assets getInstance(){
         if(instance==null) {
             instance = new Assets();
         }
         return instance;
+    }
+    public void disposeMenu()
+    {
+        MenuSkin.dispose();
+        MenuAtlas.dispose();
+        Options.dispose();
+        BSkin.dispose();
     }
 
 }
