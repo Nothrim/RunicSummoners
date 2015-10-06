@@ -37,7 +37,6 @@ public class Footman extends BaseUnit {
 
     @Override
     public void draw(Batch batch) {
-        update();
         if(walking)
         {
             if(!jumping)
@@ -111,7 +110,7 @@ public class Footman extends BaseUnit {
         super.resetLogic();
     }
 
-    private void update()
+    public void update(float deltaTime)
     {
         super.update(Gdx.graphics.getDeltaTime());
         searchTimer+=Gdx.graphics.getDeltaTime();

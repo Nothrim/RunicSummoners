@@ -50,6 +50,16 @@ public abstract class BaseProjectile {
             }
         }
     }
+    public static void updateProjectiles(float deltaTime)
+    {
+        for(BaseProjectile p: Projectiles)
+        {
+            if(p!=null && p.active)
+            {
+                p.update(deltaTime);
+            }
+        }
+    }
     private static BaseProjectile projectileFactory(int type,float x,float y,Player owner,float velocityX,float velocityY)
     {
         switch(type){
@@ -73,7 +83,7 @@ public abstract class BaseProjectile {
     }
     public void draw(SpriteBatch sb,float deltaTime)
     {
-        update(deltaTime);
+
     }
 
 

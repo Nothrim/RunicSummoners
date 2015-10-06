@@ -15,6 +15,7 @@ import com.runic.Effects.SpriteEffect;
 import com.runic.Effects.SpriteLighting;
 import com.runic.Particles.PremadeEffect;
 import com.runic.Player;
+import com.runic.World;
 
 /**
  * Created by Nothrim on 2015-09-19.
@@ -42,7 +43,7 @@ public class EnergyCloud extends BaseUnit {
             AoE.setCenter(target.getX(),target.getY());
             energy-=damage;
             PremadeEffect.spawn(0,target.getX(),target.getY()-10);
-            SpriteEffect.create(new SpriteLighting(new Vector2(getX()+32,getY()),target,0.33f));
+            World.getInstance().createSpriteEffect(new SpriteLighting(new Vector2(getX()+32,getY()),target,0.33f));
             //Line.create(new Vector2(getX(),getY()),new Vector2(target.getX(),target.getY()),1); lines are lame
             for (BaseUnit u : owner.enemy.getArmy())
             {

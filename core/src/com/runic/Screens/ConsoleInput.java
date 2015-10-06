@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Clipboard;
 import com.runic.Assets;
 
 /**
@@ -86,6 +87,13 @@ public class ConsoleInput implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if(selected) {
+
+            if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) && keycode== Input.Keys.V)
+            {
+                if(Gdx.app.getClipboard().getContents().length()<charactersInLine-stringBuilder.length())
+                stringBuilder.append(Gdx.app.getClipboard().getContents());
+                return true;
+            }
             backspace = false;
             if (keycode == com.badlogic.gdx.Input.Keys.BACKSPACE) {
                 if (stringBuilder.length() > 0) {
@@ -94,7 +102,6 @@ public class ConsoleInput implements InputProcessor {
                     stringBuilder.deleteCharAt(stringBuilder.length() - 1);
                 }
                 constantDeletion = true;
-
             }
         }
 
@@ -118,16 +125,13 @@ public class ConsoleInput implements InputProcessor {
         if(selected) {
             if (!backspace) {
                 if (stringBuilder.length() < charactersInLine) {
-//                    if (stringBuilder.length() % (charactersInLine - 1) == 0 && stringBuilder.length() > 0) {
-//                        stringBuilder.append('\n');
-//                        selector.y -= 15;
-//                    }
+
                     if (Character.isLetter(character) || Character.isDigit(character) || character == '.') {
-                        stringBuilder.append(character);
+                            stringBuilder.append(character);
+                        }
                     }
                 }
             }
-        }
         return false;
     }
 

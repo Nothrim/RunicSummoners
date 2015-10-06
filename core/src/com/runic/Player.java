@@ -2,6 +2,7 @@ package com.runic;
 
 import android.graphics.Color;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.runic.Effects.BendingRune;
 import com.runic.Effects.PolygonEffect;
+import com.runic.Screens.GameScreen;
 import com.runic.Units.BaseUnit;
 import com.runic.Units.Footman;
 import com.runic.Window.HelpWindow;
@@ -62,82 +64,81 @@ public class Player extends InputAdapter{
 
     @Override
     public boolean keyUp(int keycode) {
-        if(id==0) {
-            if (keycode == Keybindings.Hotkeys1.get("UP")) {
-                if ((Selector - 10) < 0)
-                    Selector += 40;
-                else
-                    Selector -= 10;
-            } else if (keycode == Keybindings.Hotkeys1.get("LEFT")) {
-                if (Selector != 0) {
-                    Selector--;
-                } else
-                    Selector = RUNE_TABLE_SIZE - 1;
-            } else if (keycode == Keybindings.Hotkeys1.get("RIGHT")) {
-                Selector = (Selector + 1) % 50;
-            } else if (keycode == Keybindings.Hotkeys1.get("DOWN")) {
-                Selector = (Selector + 10) % 50;
-            } else if (keycode == Keybindings.Hotkeys1.get("SELECT")) {
-                if (!RunesTable[Selector].isUsed() && castingTable.canAdd()) {
-                    Rune temp = RunesTable[Selector];
-                    RunesTable[Selector] = new Rune(Assets.getInstance().RuneBlank, 0, "Blank", temp.getX(), temp.getY(), true);
-                    castingTable.add(temp);
-                }
-            } else if (keycode == Keybindings.Hotkeys1.get("RELASE")) {
-                castingTable.cast();
-            }
-            else if (keycode == Keybindings.Hotkeys1.get("HELP")) {
-                if(helpWindow==null || !helpWindow.isActive())
-                {
-                    helpWindow=new HelpWindow(this);
-                    Window.create(helpWindow);
-                }
-                else
-                {
-                    helpWindow.close();
-                }
-            }
-
-        }
-        else if(id==1)
+        if(id ==0 && keycode== Input.Keys.ESCAPE)
         {
-            if (keycode == Keybindings.Hotkeys2.get("UP")) {
-                if ((Selector - 10) < 0)
-                    Selector += 40;
-                else
-                    Selector -= 10;
-            } else if (keycode == Keybindings.Hotkeys2.get("LEFT")) {
-                if (Selector != 0) {
-                    Selector--;
-                } else
-                    Selector = RUNE_TABLE_SIZE - 1;
-            } else if (keycode == Keybindings.Hotkeys2.get("RIGHT")) {
-                Selector = (Selector + 1) % 50;
-            } else if (keycode == Keybindings.Hotkeys2.get("DOWN")) {
-                Selector = (Selector + 10) % 50;
-            } else if (keycode == Keybindings.Hotkeys2.get("SELECT")) {
-                if (!RunesTable[Selector].isUsed() && castingTable.canAdd()) {
-                    Rune temp = RunesTable[Selector];
-                    RunesTable[Selector] = new Rune(Assets.getInstance().RuneBlank, 0, "Blank", temp.getX(), temp.getY(), true);
-                    castingTable.add(temp);
-                }
-            } else if (keycode == Keybindings.Hotkeys2.get("RELASE")) {
-                castingTable.cast();
-            }
-            else if (keycode == Keybindings.Hotkeys2.get("HELP")) {
-                if(helpWindow==null || !helpWindow.isActive())
-                {
-                    helpWindow=new HelpWindow(this);
-                    Window.create(helpWindow);
-                }
-                else
-                {
-                    helpWindow.close();
-                }
-
-            }
-
+            if(!World.getInstance().Multiplayer)
+                World.getInstance().stopGame();
         }
+        if(!World.getInstance().paused) {
+            if (id == 0) {
+                if (keycode == Keybindings.Hotkeys1.get("UP")) {
+                    if ((Selector - 10) < 0)
+                        Selector += 40;
+                    else
+                        Selector -= 10;
+                } else if (keycode == Keybindings.Hotkeys1.get("LEFT")) {
+                    if (Selector != 0) {
+                        Selector--;
+                    } else
+                        Selector = RUNE_TABLE_SIZE - 1;
+                } else if (keycode == Keybindings.Hotkeys1.get("RIGHT")) {
+                    Selector = (Selector + 1) % 50;
+                } else if (keycode == Keybindings.Hotkeys1.get("DOWN")) {
+                    Selector = (Selector + 10) % 50;
+                } else if (keycode == Keybindings.Hotkeys1.get("SELECT")) {
+                    if (!RunesTable[Selector].isUsed() && castingTable.canAdd()) {
+                        Rune temp = RunesTable[Selector];
+                        RunesTable[Selector] = new Rune(Assets.getInstance().RuneBlank, 0, "Blank", temp.getX(), temp.getY(), true);
+                        castingTable.add(temp);
+                    }
+                } else if (keycode == Keybindings.Hotkeys1.get("RELASE")) {
+                    castingTable.cast();
+                } else if (keycode == Keybindings.Hotkeys1.get("HELP")) {
+                    if (helpWindow == null || !helpWindow.isActive()) {
+                        helpWindow = new HelpWindow(this);
+                        Window.create(helpWindow);
+                    } else {
+                        helpWindow.close();
+                    }
+                }
+
+
+            } else if (id == 1) {
+                if (keycode == Keybindings.Hotkeys2.get("UP")) {
+                    if ((Selector - 10) < 0)
+                        Selector += 40;
+                    else
+                        Selector -= 10;
+                } else if (keycode == Keybindings.Hotkeys2.get("LEFT")) {
+                    if (Selector != 0) {
+                        Selector--;
+                    } else
+                        Selector = RUNE_TABLE_SIZE - 1;
+                } else if (keycode == Keybindings.Hotkeys2.get("RIGHT")) {
+                    Selector = (Selector + 1) % 50;
+                } else if (keycode == Keybindings.Hotkeys2.get("DOWN")) {
+                    Selector = (Selector + 10) % 50;
+                } else if (keycode == Keybindings.Hotkeys2.get("SELECT")) {
+                    if (!RunesTable[Selector].isUsed() && castingTable.canAdd()) {
+                        Rune temp = RunesTable[Selector];
+                        RunesTable[Selector] = new Rune(Assets.getInstance().RuneBlank, 0, "Blank", temp.getX(), temp.getY(), true);
+                        castingTable.add(temp);
+                    }
+                } else if (keycode == Keybindings.Hotkeys2.get("RELASE")) {
+                    castingTable.cast();
+                } else if (keycode == Keybindings.Hotkeys2.get("HELP")) {
+                    if (helpWindow == null || !helpWindow.isActive()) {
+                        helpWindow = new HelpWindow(this);
+                        Window.create(helpWindow);
+                    } else {
+                        helpWindow.close();
+                    }
+
+                }
+
+            }
+        }
+
 
         return super.keyUp(keycode);
     }
@@ -257,7 +258,6 @@ public class Player extends InputAdapter{
     }
     public void draw(SpriteBatch sb)
     {
-        update(Gdx.graphics.getDeltaTime());
         for(int i=0;i<RunesTable.length;i++)
         RunesTable[i].draw(sb);
         for(int i=0;i<Army.length;i++)
@@ -280,6 +280,18 @@ public class Player extends InputAdapter{
             Assets.getInstance().StandardFontSmall.draw(sb, CurrentCombination, Origin.x, 810);
             Assets.getInstance().StandardFontSmall.setColor(com.badlogic.gdx.graphics.Color.YELLOW);
         }
+    }
+    public void drawArmy(SpriteBatch sb)
+    {
+        for(int i=0;i<Army.length;i++)
+        {
+            if(Army[i]!=null && Army[i].isActive())
+            {
+
+                Army[i].draw(sb);
+            }
+        }
+        castle.draw(sb);
     }
     public void refill()
     {
@@ -310,7 +322,8 @@ public class Player extends InputAdapter{
             if(MathUtils.random(0,chanceOfFailure)!=0)
                RunesTable[i] = new Rune(Rune.loadSprite(-1),id,Rune.loadName(-1),RunesTable[i].getX(),RunesTable[i].getY(),true);
             else {
-                PolygonEffect.create(new BendingRune(1,castle.getSpawnpoint(),1100,RunesTable[i].getX(),RunesTable[i].getY(),this));
+
+                World.getInstance().createPolygonEffect(new BendingRune(1, castle.getSpawnpoint(), 1100, RunesTable[i].getX(), RunesTable[i].getY(), this));
                 RunesTable[i] = new Rune(Rune.loadSprite(id), id, Rune.loadName(id), RunesTable[i].getX(), RunesTable[i].getY(), false);
             }
             }
@@ -325,7 +338,7 @@ public class Player extends InputAdapter{
         castingTable.dispose();
     }
     public String getCurrentCombination(){return CurrentCombination;}
-    private void update(float deltaTime)
+    public void update(float deltaTime)
     {
         if(casting) {
             if (castingTimer > 0)
@@ -333,6 +346,13 @@ public class Player extends InputAdapter{
             else {
                 castingTimer = 0;
                 casting = false;
+            }
+        }
+        for(int i=0;i<Army.length;i++)
+        {
+            if(Army[i]!=null && Army[i].isActive())
+            {
+                Army[i].update(deltaTime);
             }
         }
     }

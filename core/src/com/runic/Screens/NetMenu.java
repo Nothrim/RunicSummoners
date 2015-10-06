@@ -1,5 +1,6 @@
 package com.runic.Screens;
 
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -9,22 +10,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.runic.Assets;
 import com.runic.Network.NetworkManager;
-
-import java.util.regex.Pattern;
+import com.runic.World;
 
 /**
  * Created by Nothrim on 2015-10-04.
  */
 public class NetMenu extends Screen {
-    private static final Pattern PATTERN = Pattern.compile(
-            "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
+
     Stage stage;
     Table table;
     IpInput ipInput;
@@ -102,10 +100,16 @@ public class NetMenu extends Screen {
                 switch (Integer.parseInt(actor.getName()))
                 {
                     case 0:
-                        if(validateIp(ipInput.getContent()))
-                        NetworkManager.getInstance().connectToServer(ipInput.getContent(),portInput.getContent());
+
+                        if ( NetworkManager.getInstance().connectToServer(ipInput.getContent(),portInput.getContent())) {
+                                    game.setScreen(new NetGameScreen(game, false));
+                        }
                         break;
                     case 1:
+
+                        if (NetworkManager.getInstance().createServer(portInput.getContent())) {
+                        game.setScreen(new NetGameScreen(game, true));
+                    }
                         break;
                     case 2:
                         game.setScreen(new MainMenu(game));
@@ -124,8 +128,5 @@ public class NetMenu extends Screen {
         sb.dispose();
         sr.dispose();
     }
-    private boolean validateIp(String ip)
-    {
-        return PATTERN.matcher(ip).matches();
-    }
+
 }

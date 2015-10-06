@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.runic.Assets;
 import com.runic.Player;
 import com.runic.Rune;
+import com.runic.World;
 
 /**
  * Created by Nothrim on 2015-09-15.
@@ -178,7 +179,7 @@ public class BendingRune extends PolygonEffect {
         super.draw(sb, deltaTime);
         Color old=sb.getColor();
         if(owner.getCurrentCombination()!=null)
-            sb.setColor(PolygonEffect.blinkingColor.getValue(deltaTime),0.5f,0f,0.3f);
+            sb.setColor(World.getInstance().blinkingColor.getValue(deltaTime),0.5f,0f,0.3f);
         sb.draw(polygonRegion,x,y);
 
         sb.setColor(old);

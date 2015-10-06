@@ -6,38 +6,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * Created by Nothrim on 2015-09-25.
  */
 public class SpriteEffect {
-    public static SpriteEffect[] effects;
-    public static void initialze(int size)
-    {
-     effects=new SpriteEffect[size];
-    }
-    public static int create(SpriteEffect spriteEffect)
-    {
-        for(int i=0;i<effects.length;i++)
-        {
-            if(effects[i]==null || !effects[i].active)
-            {
-                effects[i]=spriteEffect;
-                return i;
-            }
-        }
-        return -1;
-    }
-    public static void Draw(float deltaTime,SpriteBatch sb)
-    {
-        for(int i=0;i<effects.length;i++)
-        {
-            if(effects[i]!=null && effects[i].active)
-            {
-                effects[i].draw(deltaTime,sb);
-            }
-        }
-    }
 
 
     protected float life;
     protected float lifeTimer;
     protected boolean active;
+    public boolean isActive(){return active;}
     public SpriteEffect(float life)
     {
         this.life=life;
@@ -52,7 +26,7 @@ public class SpriteEffect {
             active=false;
         }
     }
-    protected void draw(float deltaTime,SpriteBatch sb)
+    public void draw(float deltaTime,SpriteBatch sb)
     {
         update(deltaTime);
     }

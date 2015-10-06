@@ -1,42 +1,39 @@
 package com.runic.Screens;
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.runic.*;
-import com.runic.Effects.PolygonEffect;
-import com.runic.Effects.SpriteEffect;
+import com.runic.Assets;
+import com.runic.CombatText;
 import com.runic.Network.NetworkManager;
 import com.runic.Network.SimpleMessage;
 import com.runic.Particles.PremadeEffect;
 import com.runic.Projectiles.BaseProjectile;
 import com.runic.Units.BaseUnit;
-import com.runic.Units.Dummy;
 import com.runic.Units.Gore;
-import com.runic.Utils.SmoothChangingFloat;
 import com.runic.Window.Window;
+import com.runic.World;
 
 import javax.microedition.khronos.opengles.GL10;
 
+
 /**
- * Created by Nothrim on 2015-08-06.
+ * Created by Nothrim on 2015-10-04.
  */
-public class GameScreen extends Screen {
-    public GameScreen(Game game) {
-        super(game);
-    }
+public class NetGameScreen extends Screen {
     public static final int GAME_SCREEN_WIDTH=1920;
     public static final int GAME_SCREEN_HEIGHT=1080;
     public static final int STANDARD_BUFFER_SIZE=512;
-    World world=World.getInstance();
 
     //rendering
     SpriteBatch sb;
@@ -45,7 +42,6 @@ public class GameScreen extends Screen {
     Camera GameCamera;
     FitViewport GameView;
     OrthogonalTiledMapRenderer mapRenderer;
-    InputMultiplexer inputMultiplexer;
     ShapeRenderer shapeRenderer;
 
 
@@ -55,6 +51,13 @@ public class GameScreen extends Screen {
     ShaderProgram combatTextShader;
     ShaderProgram polygonEffectShader;
     PolygonSpriteBatch polygonSpriteBatch;
+    boolean host;
+    World world;
+    public NetGameScreen(Game game, boolean host) {
+        super(game);
+        this.host=host;
+            world=World.getInstance();
+    }
 
     @Override
     public void dispose() {
@@ -70,9 +73,10 @@ public class GameScreen extends Screen {
         polygonSpriteBatch.dispose();
         super.dispose();
     }
+
     @Override
-    public void show()
-    {
+    public void show() {
+        super.show();
         Assets.getInstance().disposeMenu();
         shapeRenderer=new ShapeRenderer();
         mapRenderer=new OrthogonalTiledMapRenderer(world.map,1);
@@ -80,8 +84,8 @@ public class GameScreen extends Screen {
         ParticleRenderer=new SpriteBatch();
         windowRenderer=new SpriteBatch();
         GameCamera=new OrthographicCamera();
-        inputMultiplexer=new InputMultiplexer(world.p1,world.p2);
-        Gdx.input.setInputProcessor(inputMultiplexer);
+        world.Multiplayer=true;
+        Gdx.input.setInputProcessor(host?world.p1:world.p2);
         GameView=new FitViewport(1920,1080,GameCamera);
         GameView.apply();
 
@@ -96,14 +100,14 @@ public class GameScreen extends Screen {
         ShaderProgram.pedantic=false;
         Window.initialize(10);
         polygonSpriteBatch=new PolygonSpriteBatch(500);
-        super.show();
 
     }
 
 
-    public void update(float delta)
+    public void update(float deltaTime)
     {
-        world.update(delta);
+        if(host && NetworkManager.getInstance().server.getConnections().length>0)
+        world.multiplayerUpdate(deltaTime);
     }
     @Override
     public void render(float delta) {
@@ -119,19 +123,19 @@ public class GameScreen extends Screen {
             shapeRenderer.setColor(1, 1, 0, 0.5f);
             if(world.p1.isCasting())
                 for(int i=1;i<7;i++)
-                shapeRenderer.triangle(
-                        world.p1.getCastle().getSpawnpoint()-100, GAME_SCREEN_HEIGHT-world.p1.getCastle().getY(),
-                        world.p1.getCastle().getSpawnpoint() + 800+5*i, GAME_SCREEN_HEIGHT-world.p1.getCastle().getY()+100-world.p1.getCastingTimer()*i*5-100*i,
-                        world.p1.getCastle().getSpawnpoint() + 800+5*i, GAME_SCREEN_HEIGHT-world.p1.getCastle().getY()+100+i-100*i
-                );
+                    shapeRenderer.triangle(
+                            world.p1.getCastle().getSpawnpoint()-100, GAME_SCREEN_HEIGHT-world.p1.getCastle().getY(),
+                            world.p1.getCastle().getSpawnpoint() + 800+5*i, GAME_SCREEN_HEIGHT-world.p1.getCastle().getY()+100-world.p1.getCastingTimer()*i*5-100*i,
+                            world.p1.getCastle().getSpawnpoint() + 800+5*i, GAME_SCREEN_HEIGHT-world.p1.getCastle().getY()+100+i-100*i
+                    );
             if(world.p2.isCasting())
             {
                 for(int i=1;i<7;i++)
-                shapeRenderer.triangle(
-                        world.p2.getCastle().getSpawnpoint()+100, GAME_SCREEN_HEIGHT-world.p2.getCastle().getY(),
-                        world.p2.getCastle().getSpawnpoint() - 800-5*i, GAME_SCREEN_HEIGHT-world.p2.getCastle().getY()+100-world.p2.getCastingTimer()*5*i-100*i,
-                        world.p2.getCastle().getSpawnpoint() - 800-5*i, GAME_SCREEN_HEIGHT-world.p2.getCastle().getY()+100+i-100*i
-                );
+                    shapeRenderer.triangle(
+                            world.p2.getCastle().getSpawnpoint()+100, GAME_SCREEN_HEIGHT-world.p2.getCastle().getY(),
+                            world.p2.getCastle().getSpawnpoint() - 800-5*i, GAME_SCREEN_HEIGHT-world.p2.getCastle().getY()+100-world.p2.getCastingTimer()*5*i-100*i,
+                            world.p2.getCastle().getSpawnpoint() - 800-5*i, GAME_SCREEN_HEIGHT-world.p2.getCastle().getY()+100+i-100*i
+                    );
             }
 
             shapeRenderer.end();
@@ -142,20 +146,6 @@ public class GameScreen extends Screen {
 
         sb.setProjectionMatrix(GameView.getCamera().combined);
         sb.begin();
-        //maybe if i will need to use double buffer this will be helpfull, unused cause i need vertical blur only
-//        if(p1.isCasting() || p2.isCasting()) {
-//            blurFramePassY.begin();
-//            sb.getProjectionMatrix().setToOrtho2D(0,STANDARD_BUFFER_SIZE,STANDARD_BUFFER_SIZE,-STANDARD_BUFFER_SIZE);
-////            blurShader.setUniformf("dir", 1f, 0f);
-//            sb.setShader(blurShader);
-//            sb.draw(blurFramePass.getColorBufferTexture(), 0, 0);
-//            sb.flush();
-//            blurFramePassY.end();
-////            blurShader.setUniformf("dir", 0f, 1f);
-//
-//        }
-
-
         sb.setShader(null);
         sb.draw(Assets.getInstance().background, 0, 0);
         if(world.p1.isCasting() || world.p2.isCasting()) {
@@ -170,8 +160,14 @@ public class GameScreen extends Screen {
         mapRenderer.setView((OrthographicCamera) GameCamera);
         mapRenderer.render();
         sb.begin();
-        world.p1.draw(sb);
-        world.p2.draw(sb);
+        if(host) {
+            world.p1.draw(sb);
+            world.p2.drawArmy(sb);
+        }
+        else {
+            world.p2.draw(sb);
+            world.p1.drawArmy(sb);
+        }
 
         sb.setShader(combatTextShader);
         CombatText.draw(sb);
@@ -242,22 +238,7 @@ public class GameScreen extends Screen {
 
     @Override
     public void resize(int width, int height) {
-        GameView.update(width, height, true);
         super.resize(width, height);
-    }
-
-    @Override
-    public void pause() {
-        super.pause();
-    }
-
-    @Override
-    public void resume() {
-        super.resume();
-    }
-
-    @Override
-    public void hide() {
-        super.hide();
+        GameView.update(width, height, true);
     }
 }

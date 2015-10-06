@@ -199,7 +199,7 @@ public class BaseUnit {
     }
 
     public void draw(Batch batch) {
-        update(Gdx.graphics.getDeltaTime());
+
     }
     public BaseUnit findTarget(TYPE type){
         intersection=new Rectangle();

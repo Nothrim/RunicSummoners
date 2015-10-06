@@ -121,7 +121,7 @@ public class SpriteLighting extends SpriteEffect{
     }
 
     @Override
-    protected void draw(float deltaTime, SpriteBatch sb) {
+    public void draw(float deltaTime, SpriteBatch sb) {
         super.draw(deltaTime, sb);
         Gdx.gl.glEnable(GL10.GL_BLEND);
         Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);

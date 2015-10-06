@@ -44,7 +44,7 @@ public class CastingTable {
     }
     public void cast()
     {
-        PolygonEffect.clear(owner);
+        World.getInstance().clearPolygonEffects(owner);
         StringBuilder combination=new StringBuilder();
         for(int i=0;i<CurrentPosition;i++) {
             combination.append(table[i].id);
@@ -72,7 +72,7 @@ public class CastingTable {
                 owner.spawnUnit(new EarthWorm(owner,owner.getCastle().getSpawnpoint(),0,MathUtils.random(5,8)));
             }
             else if(Combinations.getCombination(combination.toString()).getType()==1000) {
-                    Dummy.newDummy(new DummyArrow(owner.getCastle().getSpawnpoint(), owner.getCastle().getY() + 100, owner, 180));
+                    World.getInstance().newDummy(new DummyArrow(owner.getCastle().getSpawnpoint(), owner.getCastle().getY() + 100, owner, 180));
 
             }
             else if(Combinations.getCombination(combination.toString()).getType()==1001)
@@ -85,7 +85,7 @@ public class CastingTable {
             }
             else if(Combinations.getCombination(combination.toString()).getType()==1002)
             {
-                Dummy.newDummy(new FootmanSummoner(owner.getCastle().getSpawnpoint(), owner.getCastle().getY() + 100, owner, 420));
+                World.getInstance().newDummy(new FootmanSummoner(owner.getCastle().getSpawnpoint(), owner.getCastle().getY() + 100, owner, 420));
             }
             else if(Combinations.getCombination(combination.toString()).getType()==1003)
             {
@@ -119,7 +119,7 @@ public class CastingTable {
 
         float x=table[CurrentPosition].getX();
         float y=table[CurrentPosition].getY();
-        PolygonEffect.create(new BendingRune(r.id,0.6f,r.getX(),r.getY(),x,y,owner));
+        World.getInstance().createPolygonEffect(new BendingRune(r.id, 0.6f, r.getX(), r.getY(), x, y, owner));
         table[CurrentPosition]=r;
         table[CurrentPosition].setPosition(x, y);
         CurrentPosition++;
