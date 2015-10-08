@@ -1,15 +1,5 @@
 package com.runic.Network;
-
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.kryonet.Server;
-import com.runic.World;
-
 import java.io.IOException;
-import java.net.ConnectException;
-import java.net.InetAddress;
 import java.util.regex.Pattern;
 
 /**
@@ -19,9 +9,9 @@ public class NetworkManager {
     public static final int STANDARD_PORT=54555;
     private static final Pattern PATTERN = Pattern.compile(
             "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
- private static NetworkManager instance;
-    public Server server;
-    public Client client;
+    private static NetworkManager instance;
+    public KryoServer server;
+    public KryoClient client;
     private NetworkManager()
     {
         server=null;
@@ -46,10 +36,6 @@ public class NetworkManager {
     }
     public boolean connectToServer(String sHost,String sPort)
     {
-        if(client==null)
-        {
-            client=new Client();
-        }
 
         int port;
         if(sPort.length()<1)
@@ -59,39 +45,26 @@ public class NetworkManager {
         else
             port=STANDARD_PORT;
         if(sHost.length()<1) {
-            client.start();
-            try {
-                InetAddress ia = client.discoverHost(54777, 1000);
-                sHost = ia.getHostAddress();
-                System.out.println(sHost);
+            try{
+                client=new KryoClient(port);
             }
             catch (Exception e)
             {
                 e.printStackTrace();
+                return false;
             }
+            return true;
         }
         boolean canGo=validateIp(sHost);
         if(canGo) {
             try {
-                client.start();
-
-                Kryo kryo =client.getKryo();
-                kryo.register(SimpleMessage.class);
-                kryo.register(World.class);
-                kryo.register(SimpleMessage.ID.class);
-                client.connect(300, sHost, port,54777);
-                client.addListener(new Listener() {
-                    public void received(Connection connection, Object object) {
-                    }
-                });
-
+            client=new KryoClient(sHost,port);
 
             } catch (IOException e) {
 
                 e.printStackTrace();
                 return false;
             }
-
             return true;
         }
         return false;
@@ -99,10 +72,6 @@ public class NetworkManager {
     }
     public boolean createServer(String sPort)
     {
-        if(server==null)
-        {
-            server=new Server();
-        }
         int port;
         if(sPort.length()<1)
             port=STANDARD_PORT;
@@ -110,26 +79,10 @@ public class NetworkManager {
             port=Integer.parseInt(sPort);
         else
             port=STANDARD_PORT;
-        try {
-
-            server.start();
-            server.bind(port, 54777);
-            Kryo kryo =server.getKryo();
-            kryo.register(SimpleMessage.class);
-            kryo.register(World.class);
-            kryo.register(SimpleMessage.ID.class);
-            server.addListener(new Listener() {
-                                   public void received(Connection connection, Object object) {
-                                      System.out.println("Got something");
-            
-                                   }
-
-                               }
-            );
-
-
+        try{
+            server=new KryoServer(port);
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             e.printStackTrace();
             return false;

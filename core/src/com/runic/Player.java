@@ -1,5 +1,6 @@
 package com.runic;
 
+import Interfaces.INetPlayer;
 import android.graphics.Color;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.runic.Effects.BendingRune;
 import com.runic.Effects.PolygonEffect;
+import com.runic.Network.NetworkManager;
 import com.runic.Screens.GameScreen;
 import com.runic.Units.BaseUnit;
 import com.runic.Units.Footman;
@@ -19,7 +21,7 @@ import com.runic.Window.Window;
 /**
  * Created by Nothrim on 2015-08-07.
  */
-public class Player extends InputAdapter{
+public class Player extends InputAdapter implements INetPlayer{
     public HelpWindow helpWindow=null;
     public Player enemy;
     public static final int RUNE_TABLE_SIZE=50;
@@ -56,10 +58,38 @@ public class Player extends InputAdapter{
             if(Army[i]==null || !Army[i].isActive())
             {
                 Army[i]=u;
+                Army[i].setId(i);
+                if(World.getInstance().Multiplayer )
+                {
+                    if(!World.getInstance().host)
+                    NetworkManager.getInstance().client.spawnUnit(u);
+                    else
+                        NetworkManager.getInstance().server.spawnUnit(u);
+                }
                 return true;
             }
         }
         return false;
+    }
+    public boolean netSpawn(BaseUnit u)
+    {
+        for(int i=0;i<Army.length;i++)
+        {
+            if(Army[i]==null || !Army[i].isActive())
+            {
+                Army[i]=u;
+                Army[i].setId(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+    @Override
+    public void netHurt(int id, int damage) {
+        Army[id].netHurt(damage);
     }
 
     @Override
@@ -353,6 +383,17 @@ public class Player extends InputAdapter{
             if(Army[i]!=null && Army[i].isActive())
             {
                 Army[i].update(deltaTime);
+            }
+        }
+    }
+    public void clientUpdate(float deltaTime)
+    {
+        if(casting) {
+            if (castingTimer > 0)
+                castingTimer -= deltaTime;
+            else {
+                castingTimer = 0;
+                casting = false;
             }
         }
     }

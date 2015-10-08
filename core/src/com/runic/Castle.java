@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.runic.Network.NetworkManager;
 import com.runic.Units.BaseUnit;
 import org.w3c.dom.Text;
 
@@ -90,11 +91,26 @@ public class Castle {
             immune=true;
             int random = MathUtils.random(dmg / 2, dmg);
             CombatText.create(Integer.toString(random), spawnpoint, y);
+            if(World.getInstance().Multiplayer)
+            {
+                if(World.getInstance().host)
+                    NetworkManager.getInstance().server.hurtCastle(owner.whoAmI(),random);
+                else
+                    NetworkManager.getInstance().client.hurtCastle(owner.whoAmI(),random);
+            }
             health -= random;
             if (health<0) {
                 owner.lose();
             }
             return true;
+        }
+    }
+    public void netDamage(int damage)
+    {
+        health -= damage;
+        CombatText.create(Integer.toString(damage), spawnpoint, y);
+        if (health<0) {
+            owner.lose();
         }
     }
 

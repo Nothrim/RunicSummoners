@@ -1,17 +1,21 @@
 package com.runic.Projectiles;
 
+
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.utils.Array;
 import com.runic.Assets;
+import com.runic.Network.NetworkManager;
 import com.runic.Player;
+import com.runic.World;
 
 /**
  * Created by Nothrim on 2015-08-25.
  */
-public abstract class BaseProjectile {
+public abstract class BaseProjectile  {
+    boolean netProjectile=false;
     public static BaseProjectile[] Projectiles;
     protected Animation move;
     protected float x;
@@ -33,6 +37,14 @@ public abstract class BaseProjectile {
         {
             if(Projectiles[i]==null || !Projectiles[i].active)
             {
+                if(World.getInstance().Multiplayer){
+                    if(World.getInstance().host)
+                    {
+                        NetworkManager.getInstance().server.spawnProjectile(type,owner.whoAmI(),x,y,velocityX,velocityY);
+                    }
+                    else
+                        NetworkManager.getInstance().client.spawnProjectile(type,owner.whoAmI(),x,y,velocityX,velocityY);
+                }
                 Projectiles[i]=projectileFactory(type,x,y,owner,velocityX,velocityY);
                 return i;
             }
@@ -40,6 +52,22 @@ public abstract class BaseProjectile {
 
         return -1;
     }
+    public static int netCreateProjectile(int type,float x, float y,Player owner,float velocityX,float velocityY)
+    {
+        for(int i=0;i<Projectiles.length;i++)
+        {
+            if(Projectiles[i]==null || !Projectiles[i].active)
+            {
+                Projectiles[i]=projectileFactory(type,x,y,owner,velocityX,velocityY);
+                Projectiles[i].netProjectile=true;
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+
     public static void drawProjectiles(SpriteBatch sb,float deltaTime)
     {
         for(BaseProjectile p: Projectiles)

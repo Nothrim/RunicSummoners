@@ -65,6 +65,7 @@ public class Arrow extends BaseProjectile {
         for (BaseUnit u : owner.enemy.getArmy()) {
             if (u != null && u.isActive() && !u.isImmune()) {
                 if (Intersector.intersectRectangles(u.getHitbox(),new Rectangle(x,y,8,8),Rectangle.tmp)) {
+                    if(!netProjectile)
                     u.hurt(damage);
                     Assets.getInstance().ArrowFlesh.play(0.09f);
                     life = 0;

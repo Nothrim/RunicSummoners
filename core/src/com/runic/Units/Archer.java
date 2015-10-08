@@ -20,7 +20,6 @@ public class Archer extends BaseUnit {
     public static final float HALF_OF_SHOOTING_RADIUS=SHOOTING_RADIUS/2;
     public static final int MAX_GORE_PARTS = 4;
     public static final int MAX_ARROWS=8;
-    BaseUnit target;
     private boolean jumping = false;
     private float JumpTime = 0;
     private float AttackTimer = 0;
@@ -208,5 +207,11 @@ public class Archer extends BaseUnit {
         super.preKill();
         for(int i=0;i< MathUtils.random(2,MAX_GORE_PARTS);i++)
             Gore.newGore(getX(),getY(),1,Assets.getInstance().ArcherGore.getRandomGore(),MathUtils.random(-100, 100));
+    }
+
+    @Override
+    public void setAttacking(boolean attacking) {
+
+        shooting=attacking;
     }
 }

@@ -1,34 +1,27 @@
 package com.runic;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
+import Interfaces.IWorld;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.runic.Effects.PolygonEffect;
 import com.runic.Effects.SpriteEffect;
+import com.runic.Effects.SpriteLighting;
+import com.runic.Network.NetID;
 import com.runic.Particles.PremadeEffect;
 import com.runic.Projectiles.BaseProjectile;
 import com.runic.Units.BaseUnit;
 import com.runic.Units.Dummy;
 import com.runic.Units.Gore;
 import com.runic.Utils.SmoothChangingFloat;
-import com.runic.Window.Window;
 
 /**
  * Created by Nothrim on 2015-10-06.
  */
-public class World {
+public class World implements IWorld {
     public static final int REFILL_TIME=60;
     public static final int SUN_CHANGE_TIME=1;
     public static final int GAME_SCREEN_WIDTH=1920;
@@ -47,11 +40,43 @@ public class World {
         }
         return world;
     }
-    public static void fullWorldFromServer(World worldCopy)
-    {
-        world=worldCopy;
+
+    @Override
+    public void netCreate(int playerId, int id) {
+        if(playerId==0)
+            p1.netSpawn(NetID.getUnit(id,p1));
+        else
+            p2.netSpawn(NetID.getUnit(id,p2));
+
     }
+
+    @Override
+    public void netCreateProjectile(int id, int playerId, float x, float y, float velocityX, float velocityY) {
+
+            BaseProjectile.netCreateProjectile(id, x, y, (playerId == 0) ? p1 : p2, velocityX, velocityY);
+
+    }
+
+    @Override
+    public void netCreateSpriteLightning(Vector2 begin, int owner,int targetId, float life) {
+        createSpriteEffect(new SpriteLighting(begin,owner==0?p1.getArmy()[targetId]:p2.getArmy()[targetId],life));
+    }
+
+    @Override
+    public void netCreatePremadeEffect(int type, float positionX, float positionY) {
+        PremadeEffect.spawn(type,positionX,positionY);
+    }
+
+    @Override
+    public void netDamageCastle(int playerId, int damage) {
+        if(playerId==0)
+            p1.getCastle().netDamage(damage);
+        else
+            p2.getCastle().netDamage(damage);
+    }
+
     boolean paused=false;
+    public boolean host=false;
     public boolean Multiplayer=false;
     public void stopGame(){paused=!paused;}
     //entities and effects
@@ -121,7 +146,7 @@ public class World {
             CombatText.update(deltaTime);
         }
     }
-    public void multiplayerUpdate(float deltaTime)
+    public void serverUpdate(float deltaTime)
     {
         for (int i = 0; i < Dummies.length; i++) {
             if (Dummies[i] != null && Dummies[i].isActive()) {
@@ -136,9 +161,32 @@ public class World {
         } else {
             sun.setX(sunPosition.getValue(10));
             sunTimer = 0;
-//            if(sun.getX()>GAME_SCREEN_WIDTH)
-//                sun.translate(-GAME_SCREEN_WIDTH,0);
-//            sun.translate(10,0);
+            sun.update(GAME_SCREEN_WIDTH);
+        }
+        if (RefillTimer < REFILL_TIME) {
+            RefillTimer += deltaTime;
+        } else {
+            RefillTimer = 0;
+            p1.refill();
+            p2.refill();
+        }
+        CombatText.update(deltaTime);
+    }
+    public void clientUpdate(float deltaTime)
+    {
+        for (int i = 0; i < Dummies.length; i++) {
+            if (Dummies[i] != null && Dummies[i].isActive()) {
+                Dummies[i].update(deltaTime);
+            }
+        }
+        p1.clientUpdate(deltaTime);
+        p2.clientUpdate(deltaTime);
+        BaseProjectile.updateProjectiles(deltaTime);
+        if (sunTimer < SUN_CHANGE_TIME) {
+            sunTimer += deltaTime;
+        } else {
+            sun.setX(sunPosition.getValue(10));
+            sunTimer = 0;
             sun.update(GAME_SCREEN_WIDTH);
         }
         if (RefillTimer < REFILL_TIME) {

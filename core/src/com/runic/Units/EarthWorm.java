@@ -115,7 +115,6 @@ public class EarthWorm extends BaseUnit {
 
     private boolean jumpAttack=false;
     private boolean attacking=false;
-    private BaseUnit target;
     private float searchTimer=0;
     private float jumpPower=0;
     private boolean dir;
@@ -270,5 +269,12 @@ public class EarthWorm extends BaseUnit {
 
     }
 
-
+    @Override
+    public void interpolate(float alpha, Vector2 to, Vector2 from) {
+        super.interpolate(alpha, to, from);
+        Vector2 dir=new Vector2(positionX,positionY).sub(head.positionX,head.positionY);
+        head.rotation=MathUtils.atan2(dir.y, dir.x);
+        head.positionX=positionX;
+        head.positionY=positionY;
+    }
 }

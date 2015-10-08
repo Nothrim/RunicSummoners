@@ -8,10 +8,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.runic.AnimationData;
-import com.runic.Assets;
-import com.runic.CombatText;
-import com.runic.Player;
+import com.runic.*;
+import com.runic.Network.KryoServer;
+import com.runic.Network.NetworkManager;
 
 /**
  * Created by Nothrim on 2015-08-20.
@@ -35,6 +34,7 @@ public class BaseUnit {
     protected int MaxHealth;
     protected int damage;
     protected int speed;
+    protected int id;
     private TYPE type;
     protected float positionX;
     protected float positionY;
@@ -47,6 +47,7 @@ public class BaseUnit {
     protected float immuneTimer;
     protected int direction;
     protected Rectangle intersection;
+    protected BaseUnit target;
     //logic variables
     protected boolean active=true;
     protected boolean attacking=false;
@@ -62,6 +63,30 @@ public class BaseUnit {
     public static boolean initialized=false;
     public static ParticleEffectPool BloodParticles;
     public static Array<ParticleEffectPool.PooledEffect> effects = new Array();
+    public int whoAmI(){return id;}
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    public boolean isWalking(){return  walking;}
+    public boolean isAttacking(){return attacking;}
+
+    public void setWalking(boolean walking) {
+        this.walking = walking;
+    }
+
+    public void setAttacking(boolean attacking) {
+        this.attacking = attacking;
+    }
+
+    public BaseUnit getTarget() {
+        return target;
+    }
+
+    public void setTarget(BaseUnit target) {
+        this.target = target;
+    }
+
     public static void initialize()
     {
         BloodParticles=new ParticleEffectPool(Assets.getInstance().Blood,10,500);
@@ -175,13 +200,35 @@ public class BaseUnit {
     }
     public boolean isActive(){return active;}
 
+    public void netHurt(int damage)
+    {
+        health-=damage;
+        if (owner.whoAmI() == 1) {
+            CombatText.create(Integer.toString(damage), getX() +hitbox.getWidth() / 2+ MathUtils.random(-10, 10), getY() + MathUtils.random(30, 50), 0.5f, 0);
+        } else
+            CombatText.create(Integer.toString(damage), getX() - hitbox.getWidth() / 2 + MathUtils.random(-10, 10), getY() + MathUtils.random(30, 50), 0, 0.5f);
+        if(health<=0) {
+            preKill();
+            Kill();
+        }
+    }
 
     public void hurt(int damage){
         if(preHurt())
         {
+
             immune=true;
             int DamageDealt=MathUtils.random(damage / 2, damage);
             health-=DamageDealt;
+            if(World.getInstance().Multiplayer)
+            {
+                if(World.getInstance().host)
+                {
+                    NetworkManager.getInstance().server.hurtUnit(whoAmI(),DamageDealt,owner);
+                }
+                else
+                    NetworkManager.getInstance().client.hurtUnit(whoAmI(),DamageDealt,owner);
+            }
             if(DamageDealt>0) {
                 if (owner.whoAmI() == 1) {
                     CombatText.create(Integer.toString(DamageDealt), getX() +hitbox.getWidth() / 2+ MathUtils.random(-10, 10), getY() + MathUtils.random(30, 50), 0.5f, 0);
@@ -236,5 +283,20 @@ public class BaseUnit {
                 immune = false;
             }
         }
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void interpolate(float alpha,Vector2 to,Vector2 from)
+    {
+        time+=Gdx.graphics.getDeltaTime();
+        Vector2 currentPosition=from.lerp(to,alpha);
+        positionX=currentPosition.x;
+        positionY=currentPosition.y;
+        hitbox.x=positionX;
+        hitbox.y=positionY;
+
     }
 }

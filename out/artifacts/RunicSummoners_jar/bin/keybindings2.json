@@ -1,0 +1,30 @@
+{
+UP: {
+	class: java.lang.Integer
+	value: 51
+}
+DOWN: {
+	class: java.lang.Integer
+	value: 47
+}
+LEFT: {
+	class: java.lang.Integer
+	value: 29
+}
+RIGHT: {
+	class: java.lang.Integer
+	value: 32
+}
+SELECT: {
+	class: java.lang.Integer
+	value: 34
+}
+RELASE: {
+	class: java.lang.Integer
+	value: 35
+}
+HELP: {
+	class: java.lang.Integer
+	value: 36
+}
+}

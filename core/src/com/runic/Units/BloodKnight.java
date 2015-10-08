@@ -15,7 +15,6 @@ import com.runic.Player;
 public class BloodKnight extends BaseUnit {
     public static final float MAX_GORE_ELEMENTS=7;
     public static final int FALL_SPEED=100;
-    BaseUnit target;
     private boolean jumping=false;
     private float JumpTime;
     private float AttackTimer;

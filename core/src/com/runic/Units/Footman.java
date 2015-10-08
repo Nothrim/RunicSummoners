@@ -17,7 +17,6 @@ import com.runic.Player;
 public class Footman extends BaseUnit {
     public static final int FALL_SPEED=100;
     public static final int MAX_GORE_PARTS=4;
-    BaseUnit target;
     private boolean jumping=false;
     private float JumpTime;
     private float AttackTimer;

@@ -13,6 +13,7 @@ import com.runic.Assets;
 import com.runic.Effects.Line;
 import com.runic.Effects.SpriteEffect;
 import com.runic.Effects.SpriteLighting;
+import com.runic.Network.NetworkManager;
 import com.runic.Particles.PremadeEffect;
 import com.runic.Player;
 import com.runic.World;
@@ -25,7 +26,6 @@ public class EnergyCloud extends BaseUnit {
     public static final Vector2 MAX_RANGE=new Vector2(100,1200);
     public static final int AOE_RANGE=85;
     private float energy;
-    private BaseUnit target;
     private Rectangle range;
     private Rectangle AoE;
     private float searchTimer=0;
@@ -42,8 +42,21 @@ public class EnergyCloud extends BaseUnit {
         if(target!=null) {
             AoE.setCenter(target.getX(),target.getY());
             energy-=damage;
-            PremadeEffect.spawn(0,target.getX(),target.getY()-10);
+            PremadeEffect.spawn(0, target.getX(), target.getY() - 10);
             World.getInstance().createSpriteEffect(new SpriteLighting(new Vector2(getX()+32,getY()),target,0.33f));
+            if(World.getInstance().Multiplayer)
+            {
+                if(World.getInstance().host)
+                {
+                    NetworkManager.getInstance().server.createSpriteLightning(new Vector2(getX()+32,getY()),target.whoAmI(),target.id,0.33f);
+                    NetworkManager.getInstance().server.createPremadeEffect(0, target.getX(), target.getY() - 10);
+                }
+                else
+                {
+                    NetworkManager.getInstance().client.createSpriteLightning(new Vector2(getX()+32,getY()),target.whoAmI(),target.id,0.33f);
+                    NetworkManager.getInstance().client.createPremadeEffect(0, target.getX(), target.getY() - 10);
+                }
+            }
             //Line.create(new Vector2(getX(),getY()),new Vector2(target.getX(),target.getY()),1); lines are lame
             for (BaseUnit u : owner.enemy.getArmy())
             {
@@ -166,8 +179,7 @@ public class EnergyCloud extends BaseUnit {
         if(Math.abs(getX()-owner.enemy.getCastle().getSpawnpoint())<10)
         {
             owner.enemy.getCastle().damage((int)energy);
-            preKill();
-            Kill();
+            hurt(100);
         }
     }
 }

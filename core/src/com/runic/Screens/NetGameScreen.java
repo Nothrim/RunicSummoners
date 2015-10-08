@@ -2,7 +2,6 @@ package com.runic.Screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -16,7 +15,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.runic.Assets;
 import com.runic.CombatText;
 import com.runic.Network.NetworkManager;
-import com.runic.Network.SimpleMessage;
+
+import com.runic.Network.WorldState;
 import com.runic.Particles.PremadeEffect;
 import com.runic.Projectiles.BaseProjectile;
 import com.runic.Units.BaseUnit;
@@ -34,7 +34,10 @@ public class NetGameScreen extends Screen {
     public static final int GAME_SCREEN_WIDTH=1920;
     public static final int GAME_SCREEN_HEIGHT=1080;
     public static final int STANDARD_BUFFER_SIZE=512;
-
+    public static final float TICKRATE=33;
+    public static NetGameScreen instance=null;
+    public float serverTime;
+    private float saveTimer=0;
     //rendering
     SpriteBatch sb;
     SpriteBatch ParticleRenderer;
@@ -53,12 +56,43 @@ public class NetGameScreen extends Screen {
     PolygonSpriteBatch polygonSpriteBatch;
     boolean host;
     World world;
+    WorldState[] worldStates;
+    private float alpha;
+    WorldState wPrevious;
+    WorldState wCurrent;
+    boolean wIsCurrent=false;
     public NetGameScreen(Game game, boolean host) {
         super(game);
         this.host=host;
+        instance=this;
             world=World.getInstance();
+        if(host)
+        world.host=true;
+        worldStates=new WorldState[3];
+    }
+    private int worldStateIndex=0;
+    private void saveWorldState() {
+        worldStateIndex++;
+        if (worldStateIndex > worldStates.length - 1)
+            worldStateIndex = 0;
+        worldStates[worldStateIndex] = new WorldState(serverTime);
+
+
     }
 
+    public void loadWorldState(WorldState ws)
+    {
+
+        if(!wIsCurrent){
+            wCurrent=ws;
+            wIsCurrent=true;
+        }
+        else
+        {
+            wPrevious=ws;
+            wIsCurrent=false;
+        }
+    }
     @Override
     public void dispose() {
         mapRenderer.dispose();
@@ -106,8 +140,45 @@ public class NetGameScreen extends Screen {
 
     public void update(float deltaTime)
     {
-        if(host && NetworkManager.getInstance().server.getConnections().length>0)
-        world.multiplayerUpdate(deltaTime);
+        if(host && NetworkManager.getInstance().server.server.getConnections().length>0) {
+            if(saveTimer>1/TICKRATE)
+            {
+                saveTimer=0;
+               saveWorldState();
+                try {
+                    //FINISH WORLD STATE + PROBABLY SPAWN UNITS USING FUNCTIONS AND DONT SEND WHOLE OBJECTS OVER NET
+                    NetworkManager.getInstance().server.server.sendToAllUDP(worldStates[worldStateIndex]);
+                }
+                catch (Exception e
+                        )
+                {
+                    System.out.println("Couldnt send");
+                }
+            }
+
+            saveTimer+=deltaTime;
+            world.serverUpdate(deltaTime);
+            serverTime+=deltaTime;
+        }
+        else if(!host )
+        {
+            world.clientUpdate(deltaTime);
+            if(alpha>1)
+                alpha=1;
+            if(wIsCurrent)
+            {
+                if(wPrevious!=null)
+                wCurrent.interpolate(wPrevious, alpha);
+                wCurrent.loadBoolData();
+            }
+            else
+            {
+                if(wCurrent!=null)
+                    wPrevious.interpolate(wCurrent,alpha);
+            }
+            alpha+=deltaTime;
+        }
+
     }
     @Override
     public void render(float delta) {

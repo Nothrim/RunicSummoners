@@ -15,7 +15,6 @@ import com.runic.*;
 import com.runic.Effects.PolygonEffect;
 import com.runic.Effects.SpriteEffect;
 import com.runic.Network.NetworkManager;
-import com.runic.Network.SimpleMessage;
 import com.runic.Particles.PremadeEffect;
 import com.runic.Projectiles.BaseProjectile;
 import com.runic.Units.BaseUnit;
